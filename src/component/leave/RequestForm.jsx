@@ -27,7 +27,7 @@ const RequestForm = () => {
 
   return (
     <div className="flex flex-col justify-center items-center space-y-4">
-      <div className="lg:place-self-start">
+      <div className="lg:place-self-start w-full">
         <LeaveGreatings />
       </div>
 
