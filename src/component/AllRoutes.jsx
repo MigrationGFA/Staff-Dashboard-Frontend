@@ -63,15 +63,15 @@ const AllRoutes = () => {
       <Routes>
         {/* Authentication Routes */}
         <Route path="/" element={<Login />} />
-        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
+        <Route path="/staff/forgot-password" element={<ForgotPassword />} />
         <Route
-          path="/admin/reset-password/:email"
+          path="/staff/reset-password/:email"
           element={<ResetPassword />}
         />
-        <Route path="/admin/otp-verification/:email" element={<VerifyOtp />} />
+        <Route path="/staff/otp-verification/:email" element={<VerifyOtp />} />
 
         {/* Dashboard Routes */}
-        <Route path="/admin/overview" element={<Overview />} />
+        <Route path="/staff/overview" element={<Overview />} />
       </Routes>
       {isInstallable && (
         <button

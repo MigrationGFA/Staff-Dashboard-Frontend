@@ -76,7 +76,7 @@ const Notification = () => {
   };
 
   const handleBack = () => {
-    navigate("/admin/overview");
+    navigate("/staff/overview");
   };
 
   // Pagination Logic

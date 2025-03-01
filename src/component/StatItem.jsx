@@ -95,7 +95,7 @@ export const SubStat = ({
       ) : (
         <button
           className="flex items-center gap-1 bg-primary3 text-white px-14 py-2 rounded-lg mb-10"
-          onClick={() => navigate(`/admin/plantable/${plan}`)}
+          onClick={() => navigate(`/staff/plantable/${plan}`)}
         >
           View
         </button>

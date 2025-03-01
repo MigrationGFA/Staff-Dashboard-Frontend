@@ -31,49 +31,49 @@ import api from "../api/dashboardApi";
 const steps = [
   {
     label: "Overview",
-    link: "/admin/overview",
+    link: "/staff/overview",
     icon: OverviewImg,
     permission: "overView",
   },
   {
     label: "Leave",
-    link: "/admin/leave",
+    link: "/staff/leave",
     icon: CalendarImg,
     permission: "userBase",
   },
   {
     label: "Subscription",
-    link: "/admin/subscription",
+    link: "/staff/subscription",
     icon: subscriptionImg,
     permission: "subscription",
   },
   {
     label: "Transaction",
-    link: "/admin/transaction",
+    link: "/staff/transaction",
     icon: cashImg,
     permission: "transaction",
   },
   {
     label: "Support Ticket",
-    link: "/admin/support-ticket",
+    link: "/staff/support-ticket",
     icon: ticketImg,
     permission: "supportTicket",
   },
   {
     label: "Withdrawal",
-    link: "/admin/withdrawal",
+    link: "/staff/withdrawal",
     icon: withdrawalImg,
     permission: "withdrawal",
   },
   {
     label: "Subcategory",
-    link: "/admin/subcategory",
+    link: "/staff/subcategory",
     icon: subcategoryimg,
     permission: "subcategory",
   },
   {
     label: "Store",
-    link: "/admin/store",
+    link: "/staff/store",
     icon: storeimg,
     permission: "store",
   },
@@ -188,7 +188,7 @@ const DashboardLayout = ({ children }) => {
             userPermissions.overView &&
             (isSidebarOpen ? (
               <>
-                <Link to="/admin/overview">
+                <Link to="/staff/overview">
                   <img
                     src={Logo}
                     alt="Logo"
@@ -390,7 +390,7 @@ const DashboardLayout = ({ children }) => {
                     )}
                   </div>
                   <Link
-                    to="/admin/notification"
+                    to="/staff/notification"
                     className="block text-center text-purple-500 mt-3"
                   >
                     View all notifications
@@ -403,7 +403,7 @@ const DashboardLayout = ({ children }) => {
         <div>
           {/* Header with logo and menu button */}
           <div className="w-full lg:hidden flex items-center justify-between bg-white p-4 border-b-2">
-            <Link to="/admin/overview">
+            <Link to="/staff/overview">
               <img
                 src={Logo}
                 alt="Logo"
@@ -459,7 +459,7 @@ const DashboardLayout = ({ children }) => {
                     {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/overview"
+                          to="/staff/overview"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -470,7 +470,7 @@ const DashboardLayout = ({ children }) => {
                     {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/userbase"
+                          to="/staff/userbase"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -481,7 +481,7 @@ const DashboardLayout = ({ children }) => {
                     {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/subscription"
+                          to="/staff/subscription"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -492,7 +492,7 @@ const DashboardLayout = ({ children }) => {
                     {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/transaction"
+                          to="/staff/transaction"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -503,7 +503,7 @@ const DashboardLayout = ({ children }) => {
                     {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/support-ticket"
+                          to="/staff/support-ticket"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -514,7 +514,7 @@ const DashboardLayout = ({ children }) => {
                     {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/withdrawal"
+                          to="/staff/withdrawal"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -525,7 +525,7 @@ const DashboardLayout = ({ children }) => {
                     {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/subcategory"
+                          to="/staff/subcategory"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -536,7 +536,7 @@ const DashboardLayout = ({ children }) => {
                     {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/store"
+                          to="/staff/store"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -547,7 +547,7 @@ const DashboardLayout = ({ children }) => {
 
                     <li>
                       <Link
-                        to="/admin/notification"
+                        to="/staff/notification"
                         onClick={toggleResSidebar}
                         className="hover:text-primary3 hover:text-xl"
                       >
