@@ -1,8 +1,12 @@
+import RequestForm from "../component/leave/RequestForm";
+import DashboardLayout from "../layout/DashboardLayout";
 
 const Leave = () => {
   return (
-    <div>Leave</div>
-  )
-}
+    <DashboardLayout>
+      <RequestForm />
+    </DashboardLayout>
+  );
+};
 
-export default Leave
+export default Leave;

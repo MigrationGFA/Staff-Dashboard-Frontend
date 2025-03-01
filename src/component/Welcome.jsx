@@ -7,7 +7,7 @@ const Welcome = ({ header, message }) => {
   const defaultMessage = user ? (
     <TextSpan
       color=""
-      className="flex items-center justify-center md:justify-start"
+      className="flex items-center justify-center lg:justify-start"
     >
       Hi <div className="font-semibold ms-1">{user.fullName.split(" ")[0]}</div>
       , welcome back to your Dashboard
@@ -17,10 +17,10 @@ const Welcome = ({ header, message }) => {
     `Hi User, welcome back to Dimp ${userRole || "Admin"}!`
   );
   return (
-    <div className="w-full flex flex-col py-4 md:py-10">
+    <div className="w-full flex flex-col py-4 lg:py-10">
       <Heading
         level={1}
-        className="text-center md:text-left text-xl md:text-3xl"
+        className="text-center lg:text-left text-xl md:text-3xl text-primary3"
         size=""
         color=""
         weight="font-semibold"
@@ -29,7 +29,7 @@ const Welcome = ({ header, message }) => {
       >
         {header}
       </Heading>
-      <TextSpan className="text-primary5 text-center md:text-left">
+      <TextSpan className="text-primary5 text-center lg:text-left">
         {message || defaultMessage}
       </TextSpan>
     </div>

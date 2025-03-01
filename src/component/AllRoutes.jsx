@@ -6,6 +6,8 @@ import Login from "../pages/Authentication/Login";
 import ForgotPassword from "../pages/Authentication/ForgetPassword";
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import VerifyOtp from "../pages/Authentication/VerifyOtp";
+import Leave from "../pages/Leave";
+import Tasks from "../pages/Tasks";
 
 const AllRoutes = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -72,6 +74,8 @@ const AllRoutes = () => {
 
         {/* Dashboard Routes */}
         <Route path="/staff/overview" element={<Overview />} />
+        <Route path="/staff/leave" element={<Leave />} />
+        <Route path="/staff/task" element={<Tasks />} />
       </Routes>
       {isInstallable && (
         <button
