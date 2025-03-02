@@ -10,6 +10,8 @@ import Leave from "../pages/Leave";
 import Tasks from "../pages/Tasks";
 import Notification from "../pages/Notification";
 import Profile from "../pages/Profile";
+import Staff from "../pages/Staff";
+import AnonymousForm from "../pages/AnonymousForm";
 
 const AllRoutes = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -79,6 +81,8 @@ const AllRoutes = () => {
         <Route path="/staff/leave" element={<Leave />} />
         <Route path="/staff/task" element={<Tasks />} />
         <Route path="/staff/profile" element={<Profile />} />
+        <Route path="/staff/staff-view" element={<Staff />} />
+        <Route path="/staff/anonymous-form" element={<AnonymousForm />} />
         <Route path="/staff/notification" element={<Notification />} />
       </Routes>
       {isInstallable && (

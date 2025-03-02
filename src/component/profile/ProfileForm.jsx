@@ -18,8 +18,8 @@ const ProfileForm = () => {
   return (
     <div className="p-8 my-6 flex flex-col lg:flex-row items-center justify-around">
       {/* Profile Image */}
-      <div className="w-full lg:w-2/5 flex flex-col items-center mt-4">
-        <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center border border-sec11">
+      <div className="lg:w-2/5 flex flex-col items-center lg:mb-14">
+        <div className="w-36 h-36 bg-gray-300 rounded-full flex items-center justify-center border border-sec11">
           {profileImage ? (
             <img
               src={profileImage}
