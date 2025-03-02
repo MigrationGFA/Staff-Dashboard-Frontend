@@ -12,7 +12,7 @@ const OverviewGreetings = () => {
         padding=""
         height=""
         width=""
-        className="p-3 whitespace-nowrap rounded-lg"
+        className="p-3 whitespace-nowrap rounded-lg mb-3 lg:mb-0"
       >
         Check In
       </ButtonSmallPurple>

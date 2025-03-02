@@ -55,16 +55,16 @@ const StaffTable = () => {
 
   return (
     <div className="p-5 border rounded-lg shadow-lg mb-4">
-      <div className="flex justify-between items-center mb-6">
+      <div className="flex flex-col lg:flex-row justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-sec11">STAFF</h2>
         {/* Search & Filter */}
         <div className="flex items-center gap-4">
-          <input type="text" placeholder="Search" className="rounded-lg" />
+          <input type="text" placeholder="Search" className="rounded-lg focus:ring-primary11" />
           <ButtonSmallPurple
             padding=""
             width=""
             height=""
-            className="flex items-center text-white px-4 py-2.5 rounded-lg transition"
+            className="flex items-center text-white px-4 py-2.5 rounded-lg transition whitespace-nowrap"
             onClick={() => setIsModalOpen(true)}
           >
             <FaPlus className="mr-2" /> Add Staff

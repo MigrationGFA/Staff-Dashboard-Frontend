@@ -42,7 +42,7 @@ const RequestForm = () => {
             name="name"
             placeholder="Full name"
             onChange={handleChange}
-            className="input-field rounded-lg outline-none focus:border-primary11"
+            className="rounded-lg focus:ring-primary11"
           />
         </div>
         <div className="flex flex-col space-y-1">
@@ -52,7 +52,7 @@ const RequestForm = () => {
             name="email"
             placeholder="Email Address"
             onChange={handleChange}
-            className="input-field rounded-lg outline-none focus:border-primary11"
+            className="rounded-lg focus:ring-primary11"
           />
         </div>
 
@@ -61,7 +61,7 @@ const RequestForm = () => {
           <select
             name="department"
             onChange={handleChange}
-            className="input-field rounded-lg outline-none focus:border-primary11"
+            className="rounded-lg focus:ring-primary11"
           >
             <option value="">-- Select Option --</option>
             <option value="HR">HR</option>
@@ -75,7 +75,7 @@ const RequestForm = () => {
           <select
             name="leaveType"
             onChange={handleChange}
-            className="input-field rounded-lg outline-none focus:border-primary11"
+            className="rounded-lg focus:ring-primary11"
           >
             <option value="">-- Select Option --</option>
             <option value="Sick Leave">Sick Leave</option>
@@ -88,7 +88,7 @@ const RequestForm = () => {
           <select
             name="leaveFrom"
             onChange={handleChange}
-            className="input-field rounded-lg outline-none focus:border-primary11"
+            className="rounded-lg focus:ring-primary11"
           >
             <option value="">-- Select Option --</option>
           </select>
@@ -99,7 +99,7 @@ const RequestForm = () => {
           <select
             name="leaveTo"
             onChange={handleChange}
-            className="input-field rounded-lg outline-none focus:border-primary11"
+            className="rounded-lg focus:ring-primary11"
           >
             <option value="">-- Select Option --</option>
           </select>
@@ -110,7 +110,7 @@ const RequestForm = () => {
           <select
             name="reportingStaff"
             onChange={handleChange}
-            className="input-field rounded-lg outline-none focus:border-primary11"
+            className="rounded-lg focus:ring-primary11"
           >
             <option value="">-- Select Option --</option>
           </select>
@@ -122,7 +122,7 @@ const RequestForm = () => {
             name="reason"
             placeholder="Briefly describe..."
             onChange={handleChange}
-            className="input-field rounded-lg outline-none focus:border-primary11 h-24"
+            className="rounded-lg focus:ring-primary11 h-24"
           ></textarea>
         </div>
 

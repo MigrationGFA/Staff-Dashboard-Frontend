@@ -7,7 +7,7 @@ const Welcome = ({ header, message }) => {
   const defaultMessage = user ? (
     <TextSpan
       color=""
-      className="flex items-center justify-center lg:justify-start"
+      className="flex items-center justify-center lg:justify-start whitespace-nowrap"
     >
       Hi <div className="font-semibold ms-1">{user.fullName.split(" ")[0]}</div>
       , welcome back to your Dashboard

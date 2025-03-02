@@ -75,7 +75,7 @@ const TaskTable = () => {
         <input
           type="text"
           placeholder="Search"
-          className="w-full lg:w-1/3 rounded-lg"
+          className="w-full lg:w-1/3 rounded-lg focus:ring-primary11"
         />
         <ButtonSmallPurple
           padding=""
