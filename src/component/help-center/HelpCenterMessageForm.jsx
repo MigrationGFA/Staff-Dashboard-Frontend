@@ -1,8 +1,18 @@
-import { ButtonSmallPurple, ButtonSmallWhite } from "../Buttons";
+import { ButtonSmallPurple } from "../Buttons";
 
-const AnonymousMessageForm = () => {
+const HelpCenterMessageForm = () => {
   return (
-    <form className="p-8">
+    <form className="p-3 lg:p-8">
+      {/* Name Selection */}
+      <div className="mb-6">
+        <label className="block text-gray-600 font-medium mb-1">Name</label>
+        <input
+          type="text"
+          className="w-full rounded-lg focus:border-primary11"
+          placeholder="Name"
+        />
+      </div>
+
       {/* Department Selection */}
       <div className="mb-6">
         <label className="block text-gray-600 font-medium mb-1">
@@ -19,18 +29,7 @@ const AnonymousMessageForm = () => {
       {/* Suggestions Field */}
       <div className="mb-6">
         <label className="block text-gray-600 font-medium mb-1">
-          Suggestions
-        </label>
-        <textarea
-          className="w-full rounded-lg focus:ring-primary11 h-28"
-          placeholder="Briefly describe..."
-        ></textarea>
-      </div>
-
-      {/* Additional Details Field */}
-      <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-1">
-          Additional Details
+          How can we help?
         </label>
         <textarea
           className="w-full rounded-lg focus:ring-primary11 h-28"
@@ -39,15 +38,7 @@ const AnonymousMessageForm = () => {
       </div>
 
       {/* Buttons */}
-      <div className="flex justify-between">
-        <ButtonSmallWhite
-          padding=""
-          width=""
-          type="button"
-          className="py-3.5 px-6 rounded-lg"
-        >
-          Edit
-        </ButtonSmallWhite>
+      <div className="flex justify-end lg:justify-start">
         <ButtonSmallPurple
           padding=""
           width=""
@@ -61,4 +52,4 @@ const AnonymousMessageForm = () => {
   );
 };
 
-export default AnonymousMessageForm;
+export default HelpCenterMessageForm;

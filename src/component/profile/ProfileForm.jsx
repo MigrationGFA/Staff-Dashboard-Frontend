@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ButtonSmallPurple, ButtonSmallWhite } from "../Buttons";
+import { ButtonSmallPurple } from "../Buttons";
 
 const ProfileForm = () => {
   const [profileImage, setProfileImage] = useState(null);
@@ -52,7 +52,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Full Name</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Full Name"
           />
         </div>
@@ -61,7 +61,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Email Address</label>
           <input
             type="email"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Email Address"
           />
         </div>
@@ -70,13 +70,13 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Date of Birth</label>
           <input
             type="date"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
           />
         </div>
 
         <div>
           <label className="block text-gray-600">Department</label>
-          <select className="w-full rounded-lg focus:border-primary11">
+          <select className="w-full rounded-lg focus:ring-primary11">
             <option>-- Select Option --</option>
             <option>Engineering</option>
             <option>Marketing</option>
@@ -88,14 +88,14 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Role</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Role"
           />
         </div>
 
         <div>
           <label className="block text-gray-600">Contract Type</label>
-          <select className="w-full rounded-lg focus:border-primary11">
+          <select className="w-full rounded-lg focus:ring-primary11">
             <option>-- Select Option --</option>
             <option>Full-time</option>
             <option>Part-time</option>
@@ -107,7 +107,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Phone Number</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Phone Number"
           />
         </div>
@@ -116,7 +116,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Emergency Contact</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Emergency Contact"
           />
         </div> */}
@@ -125,14 +125,14 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Home Address</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Home Address"
           />
         </div>
 
         <div>
           <label className="block text-gray-600">Marital Status</label>
-          <select className="w-full rounded-lg focus:border-primary11">
+          <select className="w-full rounded-lg focus:ring-primary11">
             <option>-- Select Option --</option>
             <option>Single</option>
             <option>Married</option>
@@ -144,7 +144,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Next Of Kin</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Next Of Kin"
           />
         </div>
@@ -153,7 +153,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Next Of Kin Address</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Next Of Kin Address"
           />
         </div>
@@ -162,7 +162,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Next Of Kin Contact</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Next Of Kin Contact"
           />
         </div>
@@ -171,7 +171,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Medical Status</label>
           <input
             type="text"
-            className="w-full rounded-lg focus:border-primary11"
+            className="w-full rounded-lg focus:ring-primary11"
             placeholder="Medical Status"
           />
         </div>
