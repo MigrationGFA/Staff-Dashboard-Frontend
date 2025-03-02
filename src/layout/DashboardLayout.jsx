@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 // import { logout } from "../features/authentication";
 import { useNavigate } from "react-router-dom";
@@ -117,13 +117,7 @@ const DashboardLayout = ({ children }) => {
         } bg-sec1 border-r border-gray-200 flex flex-col`}
       >
         {/* Logo */}
-        <div
-          className={`pb-6 ${
-            isSidebarOpen
-              ? "flex justify-center mt-4"
-              : "flex justify-center my-3.5"
-          }`}
-        >
+        <div className="flex justify-center my-4 pb-2 border-b-2">
           {isSidebarOpen ? (
             <>
               <Link to="/staff/overview">
