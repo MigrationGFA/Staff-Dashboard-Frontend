@@ -13,9 +13,9 @@ const TrainingCards = () => {
   });
 
   return (
-    <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
       {trainings.map((training, index) => (
-        <div key={index} className="bg-white shadow-lg rounded-lg p-6 border">
+        <div key={index} className="bg-white shadow-lg rounded-lg p-6">
           {/* Valid Till */}
           <div className="flex justify-between items-center mb-3">
             <span className="bg-ter1 text-sec11 px-3 py-1 rounded-full text-sm font-medium">

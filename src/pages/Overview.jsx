@@ -1,3 +1,4 @@
+import DailyAttendance from "../component/overview/DailyAttendance";
 import OverviewAttendanceBarchart from "../component/overview/OverviewAttendanceBarchart";
 import OverviewDailyProjectStats from "../component/overview/OverviewDailyProjectStats";
 import OverviewGreetings from "../component/overview/OverviewGreetings";
@@ -9,6 +10,7 @@ const Overview = () => {
     <DashboardLayout>
       <OverviewGreetings />
       <OverviewStats />
+      <DailyAttendance />
       <OverviewDailyProjectStats />
       <OverviewAttendanceBarchart />
     </DashboardLayout>

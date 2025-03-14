@@ -1,5 +1,4 @@
 import { RxDashboard } from "react-icons/rx";
-import { ButtonSmallPurple } from "../Buttons";
 import Welcome from "../Welcome";
 const OverviewGreetings = () => {
   return (
@@ -8,14 +7,6 @@ const OverviewGreetings = () => {
         <RxDashboard className="text-primary3 place-self-center w-10 h-10 lg:w-20 lg:h-20 mt-3 lg:mt-0" />
         <Welcome header="Dashboard" message="" />
       </div>
-      <ButtonSmallPurple
-        padding=""
-        height=""
-        width=""
-        className="p-3 whitespace-nowrap rounded-lg mb-3 lg:mb-0"
-      >
-        Check In
-      </ButtonSmallPurple>
     </div>
   );
 };

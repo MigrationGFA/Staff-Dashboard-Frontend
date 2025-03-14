@@ -1,12 +1,10 @@
-import AnonymousFormGreetings from "../component/anonymousForm/AnonymousFormGreetings";
-import AnonymousMessageForm from "../component/anonymousForm/AnonymousMessageForm";
+import AnonymousMainPage from "../component/anonymousForm/AnonymousMainPage";
 import DashboardLayout from "../layout/DashboardLayout";
 
 const AnonymousForm = () => {
   return (
     <DashboardLayout>
-      <AnonymousFormGreetings />
-      <AnonymousMessageForm />
+      <AnonymousMainPage />
     </DashboardLayout>
   );
 };

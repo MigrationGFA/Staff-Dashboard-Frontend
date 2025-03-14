@@ -1,12 +1,10 @@
-import HelpCenterGreetings from "../component/help-center/HelpCenterGreetings";
-import HelpCenterMessageForm from "../component/help-center/HelpCenterMessageForm";
+import HelpCenterMainPage from "../component/help-center/HelpCenterMainPage";
 import DashboardLayout from "../layout/DashboardLayout";
 
 const HelpCenter = () => {
   return (
     <DashboardLayout>
-      <HelpCenterGreetings />
-      <HelpCenterMessageForm />
+      <HelpCenterMainPage />
     </DashboardLayout>
   );
 };

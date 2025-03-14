@@ -46,8 +46,7 @@ const ForgotPassword = () => {
       if (response.status === 200) {
         showToast(response.data.message);
         // setShowSuccessModal(true);
-        navigate(`/staff/otp-verification/${data.email}`);
-
+        navigate(`/otp-verification/${data.email}`);
       } else {
         showToast(response.data.message || "Failed to send reset link");
       }

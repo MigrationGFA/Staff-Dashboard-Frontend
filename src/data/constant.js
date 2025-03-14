@@ -10,43 +10,43 @@ import questionicon from "../assets/questionicon.svg";
 export const steps = [
   {
     label: "Overview",
-    link: "/staff/overview",
+    link: "/overview",
     icon: OverviewImg,
     permission: "overView",
   },
   {
     label: "Leave",
-    link: "/staff/leave",
+    link: "/leave",
     icon: CalendarImg,
     permission: "userBase",
   },
   {
     label: "Task",
-    link: "/staff/task",
+    link: "/task",
     icon: taskicon,
     permission: "subscription",
   },
   {
     label: "Profile",
-    link: "/staff/profile",
+    link: "/profile",
     icon: profileicon,
     permission: "transaction",
   },
   {
     label: "Staff",
-    link: "/staff/staff-view",
+    link: "/staff-view",
     icon: stafficon,
     permission: "supportTicket",
   },
   {
     label: "Anonymous Form",
-    link: "/staff/anonymous-form",
+    link: "/anonymous",
     icon: noteicon,
     permission: "withdrawal",
   },
   {
     label: "Training",
-    link: "/staff/training",
+    link: "/training",
     icon: subcategoryimg,
     permission: "subcategory",
   },
@@ -55,7 +55,7 @@ export const steps = [
 export const lowerSteps = [
   {
     label: "Help Center",
-    link: "/staff/help-center",
+    link: "/help-center",
     icon: questionicon,
   },
 ];

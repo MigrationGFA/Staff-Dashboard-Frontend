@@ -14,6 +14,8 @@ import Staff from "../pages/Staff";
 import AnonymousForm from "../pages/AnonymousForm";
 import HelpCenter from "../pages/HelpCenter";
 import Training from "../pages/Training";
+import AnonymousMessagePage from "./anonymousForm/AnonymousMessagePage";
+import HelpCenterMessagePage from "./help-center/HelpCenterMessagePage";
 
 const AllRoutes = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -71,23 +73,22 @@ const AllRoutes = () => {
       <Routes>
         {/* Authentication Routes */}
         <Route path="/" element={<Login />} />
-        <Route path="/staff/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/staff/reset-password/:email"
-          element={<ResetPassword />}
-        />
-        <Route path="/staff/otp-verification/:email" element={<VerifyOtp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:email" element={<ResetPassword />} />
+        <Route path="/otp-verification/:email" element={<VerifyOtp />} />
 
         {/* Dashboard Routes */}
-        <Route path="/staff/overview" element={<Overview />} />
-        <Route path="/staff/leave" element={<Leave />} />
-        <Route path="/staff/task" element={<Tasks />} />
-        <Route path="/staff/profile" element={<Profile />} />
-        <Route path="/staff/staff-view" element={<Staff />} />
-        <Route path="/staff/anonymous-form" element={<AnonymousForm />} />
-        <Route path="/staff/training" element={<Training />} />
-        <Route path="/staff/help-center" element={<HelpCenter />} />
-        <Route path="/staff/notification" element={<Notification />} />
+        <Route path="/overview" element={<Overview />} />
+        <Route path="/leave" element={<Leave />} />
+        <Route path="/task" element={<Tasks />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/staff-view" element={<Staff />} />
+        <Route path="/anonymous" element={<AnonymousForm />} />
+        <Route path="/anonymous-form" element={<AnonymousMessagePage />} />
+        <Route path="/training" element={<Training />} />
+        <Route path="/help-center" element={<HelpCenter />} />
+        <Route path="/help-center-form" element={<HelpCenterMessagePage />} />
+        <Route path="/notification" element={<Notification />} />
       </Routes>
       {isInstallable && (
         <button

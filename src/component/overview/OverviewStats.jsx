@@ -14,7 +14,7 @@ const OverviewStats = () => {
       <div className="flex flex-col shadow-xl rounded-lg p-4 bg-gradient-to-tr from-sec10 to-sec11 space-y-4 hover:scale-105 transition duration-300">
         <TextSpan size="" color="" className="text-xl">
           Weekly KPI
-        </TextSpan>
+        </TextSpan> 
         <TextSpan size="" color="" className="text-3xl">
           0%
         </TextSpan>

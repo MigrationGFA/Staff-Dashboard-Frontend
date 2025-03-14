@@ -1,28 +1,18 @@
-import { ButtonSmallPurple } from "../Buttons";
+import { useNavigate } from "react-router-dom";
+import { ButtonSmallPurple, ButtonSmallWhite } from "../Buttons";
 
 const HelpCenterMessageForm = () => {
+  const navigate = useNavigate();
   return (
     <form className="p-3 lg:p-8">
-      {/* Name Selection */}
+      {/* Reason Selection */}
       <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-1">Name</label>
-        <input
-          type="text"
-          className="w-full rounded-lg focus:border-primary11"
-          placeholder="Name"
-        />
-      </div>
-
-      {/* Department Selection */}
-      <div className="mb-6">
-        <label className="block text-gray-600 font-medium mb-1">
-          Department
-        </label>
+        <label className="block text-gray-600 font-medium mb-1">Reason</label>
         <select className="w-full rounded-lg focus:ring-primary11">
           <option>-- Select Option --</option>
-          <option>HR</option>
-          <option>Engineering</option>
-          <option>Marketing</option>
+          <option>Dispute</option>
+          <option>Maltreatment</option>
+          <option>Suggestion</option>
         </select>
       </div>
 
@@ -38,7 +28,16 @@ const HelpCenterMessageForm = () => {
       </div>
 
       {/* Buttons */}
-      <div className="flex justify-end lg:justify-start">
+      <div className="flex justify-between">
+        <ButtonSmallWhite
+          padding=""
+          width=""
+          type="button"
+          className="py-3.5 px-6 rounded-lg"
+          onClick={() => navigate(-1)}
+        >
+          Return
+        </ButtonSmallWhite>
         <ButtonSmallPurple
           padding=""
           width=""

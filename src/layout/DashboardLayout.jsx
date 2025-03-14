@@ -120,7 +120,7 @@ const DashboardLayout = ({ children }) => {
         <div className="flex justify-center my-4 pb-2 border-b-2">
           {isSidebarOpen ? (
             <>
-              <Link to="/staff/overview">
+              <Link to="/overview">
                 <img
                   src={Logo}
                   alt="Logo"
@@ -197,9 +197,9 @@ const DashboardLayout = ({ children }) => {
                 <Link
                   to={step.link}
                   key={index}
-                  className={`flex items-center w-full hover:bg-primary3 hover:border hover:border-r-4 rounded-lg p-2 transition-all duration-300 ${
+                  className={`flex items-center w-full hover:bg-primary3 rounded-lg p-2 transition-all duration-300 ${
                     isActive
-                      ? "bg-primary3 border border-r-4 border-r-sec5"
+                      ? "bg-primary3"
                       : ""
                   }`}
                 >
@@ -387,7 +387,7 @@ const DashboardLayout = ({ children }) => {
                     )}
                   </div>
                   <Link
-                    to="/staff/notification"
+                    to="/notification"
                     className="block text-center text-purple-500 mt-3"
                   >
                     View all notifications
@@ -400,7 +400,7 @@ const DashboardLayout = ({ children }) => {
         <div>
           {/* Header with logo and menu button */}
           <div className="w-full lg:hidden flex items-center justify-between bg-white p-4 border-b-2">
-            <Link to="/staff/overview">
+            <Link to="/overview">
               <img
                 src={Logo}
                 alt="Logo"
@@ -468,7 +468,7 @@ const DashboardLayout = ({ children }) => {
                     {/* {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/staff/store"
+                          to="/store"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
@@ -479,7 +479,7 @@ const DashboardLayout = ({ children }) => {
 
                     <li>
                       <Link
-                        to="/staff/help-center"
+                        to="/help-center"
                         onClick={toggleResSidebar}
                         className="hover:text-primary3 hover:text-xl"
                       >
