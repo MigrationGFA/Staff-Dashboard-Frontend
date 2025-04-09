@@ -114,7 +114,7 @@ const VerifyOtp = () => {
       });
 
       showToast(response.data.message, "success");
-      navigate(`/admin/reset-password/${email}`);
+      navigate(`/reset-password/${email}`);
       setLoading(false);
     } catch (error) {
       setLoading(false);

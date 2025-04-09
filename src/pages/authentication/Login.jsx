@@ -56,7 +56,7 @@ const Login = () => {
         showToast(errorPayload);
       } else if (adminLogin.fulfilled.match(resultAction)) {
         showToast(resultAction.payload.message);
-        navigate("/admin/overview");
+        navigate("/overview");
       }
     } catch (error) {
       // Handle unexpected errors, such as network issues
@@ -144,7 +144,7 @@ const Login = () => {
 
               <div className="flex justify-end items-center mb-6">
                 <Link
-                  to="/admin/forgot-password"
+                  to="/forgot-password"
                   className="text-sm text-purple-600 hover:underline"
                 >
                   Forgot Password?

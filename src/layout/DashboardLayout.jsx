@@ -1,83 +1,23 @@
 import { useEffect, useState } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 // import { logout } from "../features/authentication";
 import { useNavigate } from "react-router-dom";
 import Logo from "../assets/DIMP logo colored.png";
-import OverviewImg from "../assets/overview.svg";
-import CalendarImg from "../assets/CalendarDots.svg";
-import cashImg from "../assets/cash.svg";
-import ticketImg from "../assets/ticket.svg";
-import subscriptionImg from "../assets/subscription.svg";
 import logOutImg from "../assets/SignOut.svg";
-import withdrawalImg from "../assets/withdrawIcon.svg";
 import NotificationIcon from "../assets/notification.svg";
 import ThemeSwitchIcon from "../assets/themeswitch.svg";
 import { Heading, TextSpan } from "../component/Text";
 import { useSelector } from "react-redux";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEnvelope } from "@fortawesome/free-solid-svg-icons";
-import subcategoryimg from "../assets/subcategory.svg";
-import storeimg from "../assets/store.svg";
-import { IoIosSearch } from "react-icons/io";
 import Avatar from "../assets/person.png";
-import { LongInputWithPlaceholder } from "../component/Inputs";
 import { RiMenu3Line } from "react-icons/ri";
 import { MdCancel, MdOutlineCancel } from "react-icons/md";
 import { logout } from "../features/authentication";
 import { PERMISSIONS } from "../component/Permission";
 import api from "../api/dashboardApi";
-
-const steps = [
-  {
-    label: "Overview",
-    link: "/admin/overview",
-    icon: OverviewImg,
-    permission: "overView",
-  },
-  {
-    label: "Leave",
-    link: "/admin/leave",
-    icon: CalendarImg,
-    permission: "userBase",
-  },
-  {
-    label: "Subscription",
-    link: "/admin/subscription",
-    icon: subscriptionImg,
-    permission: "subscription",
-  },
-  {
-    label: "Transaction",
-    link: "/admin/transaction",
-    icon: cashImg,
-    permission: "transaction",
-  },
-  {
-    label: "Support Ticket",
-    link: "/admin/support-ticket",
-    icon: ticketImg,
-    permission: "supportTicket",
-  },
-  {
-    label: "Withdrawal",
-    link: "/admin/withdrawal",
-    icon: withdrawalImg,
-    permission: "withdrawal",
-  },
-  {
-    label: "Subcategory",
-    link: "/admin/subcategory",
-    icon: subcategoryimg,
-    permission: "subcategory",
-  },
-  {
-    label: "Store",
-    link: "/admin/store",
-    icon: storeimg,
-    permission: "store",
-  },
-];
+import { steps, lowerSteps } from "../data/constant";
 
 const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
@@ -177,39 +117,31 @@ const DashboardLayout = ({ children }) => {
         } bg-sec1 border-r border-gray-200 flex flex-col`}
       >
         {/* Logo */}
-        <div
-          className={`pb-6 ${
-            isSidebarOpen
-              ? "flex justify-center mt-4"
-              : "flex justify-center mt-5"
-          }`}
-        >
-          {userPlan &&
-            userPermissions.overView &&
-            (isSidebarOpen ? (
-              <>
-                <Link to="/admin/overview">
-                  <img
-                    src={Logo}
-                    alt="Logo"
-                    className={`transition-all duration-300 ${
-                      isSidebarOpen ? "w-28" : "hidden"
-                    }`}
-                  />
-                </Link>
-              </>
-            ) : (
-              <button
-                onClick={toggleSidebar}
-                className="flex items-center text-xl"
-              >
-                <RiMenu3Line size={25} />
-              </button>
-            ))}
+        <div className="flex justify-center my-4 pb-2 border-b-2">
+          {isSidebarOpen ? (
+            <>
+              <Link to="/overview">
+                <img
+                  src={Logo}
+                  alt="Logo"
+                  className={`transition-all duration-300 ${
+                    isSidebarOpen ? "w-28" : "hidden"
+                  }`}
+                />
+              </Link>
+            </>
+          ) : (
+            <button
+              onClick={toggleSidebar}
+              className="flex items-center text-xl"
+            >
+              <RiMenu3Line size={28} />
+            </button>
+          )}
         </div>
 
         {/* Sidebar Links */}
-        <div className="flex-grow flex flex-col items-start space-y-4">
+        <div className="flex-grow flex flex-col items-start space-y-1">
           {steps
             .filter((step) => userPermissions[step.permission])
             .map((step, index) => {
@@ -250,6 +182,51 @@ const DashboardLayout = ({ children }) => {
                 </Link>
               );
             })}
+          <div className="w-full border-t-2 border-sec6">
+            <div
+              className={`font-semibold py-2 ${isSidebarOpen ? "" : "hidden"}`}
+            >
+              OTHERS
+            </div>
+            {lowerSteps.map((step, index) => {
+              const isActive = step.isActive
+                ? step.isActive(location.pathname)
+                : location.pathname === step.link;
+
+              return (
+                <Link
+                  to={step.link}
+                  key={index}
+                  className={`flex items-center w-full hover:bg-primary3 rounded-lg p-2 transition-all duration-300 ${
+                    isActive
+                      ? "bg-primary3"
+                      : ""
+                  }`}
+                >
+                  <img
+                    src={step.icon}
+                    alt={step.label}
+                    className={` transition-all duration-300 ${
+                      isSidebarOpen ? "mr-3 w-6 h-6" : "w-24 h-6"
+                    }`}
+                  />
+                  {isSidebarOpen && (
+                    <Heading
+                      level={4}
+                      size="lg"
+                      lineHeight="leading-1"
+                      color={isActive ? "primary4" : "primary4"}
+                      className={`font-semibold xl:text-[13px] lg:text-[11px] ${
+                        isActive ? "font-bold" : "font-normal"
+                      }`}
+                    >
+                      {step.label}
+                    </Heading>
+                  )}
+                </Link>
+              );
+            })}
+          </div>
         </div>
 
         {/* Logout Button */}
@@ -280,7 +257,7 @@ const DashboardLayout = ({ children }) => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full lg:mx-8 h-screen grid grid-cols-1 font-body ">
+      <div className="w-full h-screen grid grid-cols-1 font-body ">
         <div className="hidden lg:block">
           <div className="flex items-center justify-between bg-white p-4 border-b-2">
             {isSidebarOpen ? (
@@ -295,7 +272,7 @@ const DashboardLayout = ({ children }) => {
                 <img
                   src={Logo}
                   alt="Logo"
-                  className={`transition-all duration-300 w-28`}
+                  className={`transition-all duration-300 w-28 h-auto`}
                 />
               </>
             )}
@@ -312,25 +289,45 @@ const DashboardLayout = ({ children }) => {
             </div>
 
             {/* User Controls (Notification, Theme Switch, Profile) */}
-            <div className="flex items-center space-x-4">
+            <div className="flex items-center mr-8">
               <img
                 src={NotificationIcon}
                 alt="Notifications"
-                className="w-6 h-6 cursor-pointer"
+                className="w-8 h-auto p-1 cursor-pointer border border-sec2 rounded-lg hover:bg-primary6 mr-4"
                 onClick={toggleNotification}
               />
-              <img
+              {/* <img
                 src={ThemeSwitchIcon}
                 alt="Theme Switch"
-                className="w-6 h-6 cursor-pointer"
+                className="w-6 h-6 cursor-pointer mr-3"
+              /> */}
+
+              <img
+                src={Avatar}
+                alt="user image"
+                className="rounded-full border-2 border-primary5 bg-primary5 w-8 h-8 mr-2"
               />
-              <div className="flex space-x-1">
-                <TextSpan>Hello,</TextSpan>
-                <TextSpan className="font-semibold">{user.fullName}</TextSpan>
+
+              <div className="flex flex-col justify-center space-y-1 text-sec11">
+                <TextSpan
+                  size=""
+                  color=""
+                  weight="font-medium"
+                  lineHeight="leading-none"
+                  className="text-sm"
+                >
+                  {user.fullName}
+                </TextSpan>
+                <TextSpan
+                  size=""
+                  color=""
+                  weight="font-medium"
+                  lineHeight="leading-none"
+                  className="text-xs"
+                >
+                  {user.role}
+                </TextSpan>
               </div>
-              <div className="bg-primary5 rounded-full w-8 h-8">
-                <img src={Avatar} alt="user image" className="rounded-full" />
-              </div>{" "}
               {/* Notification Dropdown */}
               {isNotificationOpen && (
                 <div
@@ -390,7 +387,7 @@ const DashboardLayout = ({ children }) => {
                     )}
                   </div>
                   <Link
-                    to="/admin/notification"
+                    to="/notification"
                     className="block text-center text-purple-500 mt-3"
                   >
                     View all notifications
@@ -403,7 +400,7 @@ const DashboardLayout = ({ children }) => {
         <div>
           {/* Header with logo and menu button */}
           <div className="w-full lg:hidden flex items-center justify-between bg-white p-4 border-b-2">
-            <Link to="/admin/overview">
+            <Link to="/overview">
               <img
                 src={Logo}
                 alt="Logo"
@@ -456,102 +453,37 @@ const DashboardLayout = ({ children }) => {
                 {/* Navigation items */}
                 <nav className="text-center">
                   <ul className="text-lg space-y-5">
-                    {userPlan && userPermissions.overView && (
-                      <li>
+                    {steps.map((item, index) => (
+                      <li key={index}>
                         <Link
-                          to="/admin/overview"
+                          to={item.link}
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
-                          Overview
+                          {item.label}
                         </Link>
                       </li>
-                    )}
-                    {userPlan && userPermissions.overView && (
+                    ))}
+
+                    {/* {userPlan && userPermissions.overView && (
                       <li>
                         <Link
-                          to="/admin/userbase"
-                          onClick={toggleResSidebar}
-                          className="hover:text-primary3 hover:text-xl"
-                        >
-                          Userbase
-                        </Link>
-                      </li>
-                    )}
-                    {userPlan && userPermissions.overView && (
-                      <li>
-                        <Link
-                          to="/admin/subscription"
-                          onClick={toggleResSidebar}
-                          className="hover:text-primary3 hover:text-xl"
-                        >
-                          Subscription
-                        </Link>
-                      </li>
-                    )}
-                    {userPlan && userPermissions.overView && (
-                      <li>
-                        <Link
-                          to="/admin/transaction"
-                          onClick={toggleResSidebar}
-                          className="hover:text-primary3 hover:text-xl"
-                        >
-                          Transaction
-                        </Link>
-                      </li>
-                    )}
-                    {userPlan && userPermissions.overView && (
-                      <li>
-                        <Link
-                          to="/admin/support-ticket"
-                          onClick={toggleResSidebar}
-                          className="hover:text-primary3 hover:text-xl"
-                        >
-                          Support Ticket
-                        </Link>
-                      </li>
-                    )}
-                    {userPlan && userPermissions.overView && (
-                      <li>
-                        <Link
-                          to="/admin/withdrawal"
-                          onClick={toggleResSidebar}
-                          className="hover:text-primary3 hover:text-xl"
-                        >
-                          Withdrawal
-                        </Link>
-                      </li>
-                    )}
-                    {userPlan && userPermissions.overView && (
-                      <li>
-                        <Link
-                          to="/admin/subcategory"
-                          onClick={toggleResSidebar}
-                          className="hover:text-primary3 hover:text-xl"
-                        >
-                          Subcategory
-                        </Link>
-                      </li>
-                    )}
-                    {userPlan && userPermissions.overView && (
-                      <li>
-                        <Link
-                          to="/admin/store"
+                          to="/store"
                           onClick={toggleResSidebar}
                           className="hover:text-primary3 hover:text-xl"
                         >
                           Store
                         </Link>
                       </li>
-                    )}
+                    )} */}
 
                     <li>
                       <Link
-                        to="/admin/notification"
+                        to="/help-center"
                         onClick={toggleResSidebar}
                         className="hover:text-primary3 hover:text-xl"
                       >
-                        Notifications
+                        Help Center
                       </Link>
                     </li>
 
@@ -572,7 +504,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* Main Content Area */}
         <div className="col-span-1 overflow-y-auto overflow-x-hidden ">
-          <div className="px-4">{children}</div>
+          <div className="px-4 lg:px-8">{children}</div>
         </div>
       </div>
     </div>

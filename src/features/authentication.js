@@ -12,7 +12,7 @@ const initialState = {
 
 // admin login
 export const adminLogin = createAsyncThunk(
-  "auth/adminLogin",
+  "authLogin",
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const response = await api.adminLogin({ email, password });

@@ -29,7 +29,7 @@ const OverviewDailyProjectStats = () => {
             size={50}
             className="text-sec11 p-2 border rounded-lg shadow"
           />
-          <TextSpan size="xl" color="sec3">
+          <TextSpan size="xl" color="sec3" className="font-medium">
             Daily Projects
           </TextSpan>
         </div>

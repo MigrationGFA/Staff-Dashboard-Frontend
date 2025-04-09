@@ -1,11 +1,21 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import Overview from "../pages/overview";
 
+import Overview from "../pages/overview";
 import Login from "../pages/Authentication/Login";
 import ForgotPassword from "../pages/Authentication/ForgetPassword";
 import ResetPassword from "../pages/Authentication/ResetPassword";
 import VerifyOtp from "../pages/Authentication/VerifyOtp";
+import Leave from "../pages/Leave";
+import Tasks from "../pages/Tasks";
+import Notification from "../pages/Notification";
+import Profile from "../pages/Profile";
+import Staff from "../pages/Staff";
+import AnonymousForm from "../pages/AnonymousForm";
+import HelpCenter from "../pages/HelpCenter";
+import Training from "../pages/Training";
+import AnonymousMessagePage from "./anonymousForm/AnonymousMessagePage";
+import HelpCenterMessagePage from "./help-center/HelpCenterMessagePage";
 
 const AllRoutes = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -63,15 +73,22 @@ const AllRoutes = () => {
       <Routes>
         {/* Authentication Routes */}
         <Route path="/" element={<Login />} />
-        <Route path="/admin/forgot-password" element={<ForgotPassword />} />
-        <Route
-          path="/admin/reset-password/:email"
-          element={<ResetPassword />}
-        />
-        <Route path="/admin/otp-verification/:email" element={<VerifyOtp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password/:email" element={<ResetPassword />} />
+        <Route path="/otp-verification/:email" element={<VerifyOtp />} />
 
         {/* Dashboard Routes */}
-        <Route path="/admin/overview" element={<Overview />} />
+        <Route path="/overview" element={<Overview />} />
+        <Route path="/leave" element={<Leave />} />
+        <Route path="/task" element={<Tasks />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/staff-view" element={<Staff />} />
+        <Route path="/anonymous" element={<AnonymousForm />} />
+        <Route path="/anonymous-form" element={<AnonymousMessagePage />} />
+        <Route path="/training" element={<Training />} />
+        <Route path="/help-center" element={<HelpCenter />} />
+        <Route path="/help-center-form" element={<HelpCenterMessagePage />} />
+        <Route path="/notification" element={<Notification />} />
       </Routes>
       {isInstallable && (
         <button

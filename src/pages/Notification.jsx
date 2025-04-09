@@ -76,7 +76,7 @@ const Notification = () => {
   };
 
   const handleBack = () => {
-    navigate("/admin/overview");
+    navigate("/overview");
   };
 
   // Pagination Logic
@@ -108,7 +108,7 @@ const Notification = () => {
             placeholder="Search"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full sm:w-80 px-4 py-2 pl-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className="w-full sm:w-80 px-4 py-2 pl-3 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-primary11"
           />
         </div>
         <ButtonSmallPurple
