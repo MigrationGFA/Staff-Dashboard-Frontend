@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import Overview from "../pages/overview";
 import Login from "../pages/Authentication/Login";
 import ForgotPassword from "../pages/Authentication/ForgetPassword";
 import ResetPassword from "../pages/Authentication/ResetPassword";
@@ -16,6 +15,7 @@ import HelpCenter from "../pages/HelpCenter";
 import Training from "../pages/Training";
 import AnonymousMessagePage from "./anonymousForm/AnonymousMessagePage";
 import HelpCenterMessagePage from "./help-center/HelpCenterMessagePage";
+import Overview from "../pages/Overview";
 
 const AllRoutes = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
