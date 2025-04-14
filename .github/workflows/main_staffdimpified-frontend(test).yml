@@ -61,4 +61,4 @@ jobs:
           app-name: 'staffdimpified-frontend'
           slot-name: 'test'
           package: .
-          publish-profile: ${{ secrets.AZURE_PUBLISH_PROFILE }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_241C2164629D40A185B19FE7E07419F6 }}
