@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import Login from "../pages/Authentication/Login";
-import ForgotPassword from "../pages/Authentication/ForgetPassword";
-import ResetPassword from "../pages/Authentication/ResetPassword";
-import VerifyOtp from "../pages/Authentication/VerifyOtp";
+import Login from "../pages/authentication/Login";
+import ForgotPassword from "../pages/authentication/ForgetPassword";
+import ResetPassword from "../pages/authentication/ResetPassword";
+import VerifyOtp from "../pages/authentication/VerifyOtp";
 import Leave from "../pages/Leave";
 import Tasks from "../pages/Tasks";
 import Notification from "../pages/Notification";
