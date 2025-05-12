@@ -25,12 +25,12 @@ const DashboardLayout = ({ children }) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const location = useLocation();
   const [notifications, setNotifications] = useState([]);
-  const userPlan = useSelector((state) => state.auth.user.role);
-  const userPermissions = PERMISSIONS[userPlan] || PERMISSIONS["Admin"] || {};
+  // const userPlan = useSelector((state) => state.auth.user.role);
+  // const userPermissions = PERMISSIONS[userPlan] || PERMISSIONS["Admin"] || {};
   // const userImage = useSelector((state) => state.auth.user?.image || null);
   const user = useSelector((state) => state.auth.user);
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
-  const userEmail = useSelector((state) => state?.auth?.user.email);
+  // const userEmail = useSelector((state) => state?.auth?.user.email);
 
   const getNotification = async () => {
     try {
@@ -43,7 +43,7 @@ const DashboardLayout = ({ children }) => {
         userEmail,
       });
 
-      console.log("emao:", userEmail);
+      console.log("email:", userEmail);
       setNotifications(response);
     } catch (error) {
       console.error("Could not get notifications:", error);
@@ -142,46 +142,43 @@ const DashboardLayout = ({ children }) => {
 
         {/* Sidebar Links */}
         <div className="flex-grow flex flex-col items-start space-y-1">
-          {steps
-            .filter((step) => userPermissions[step.permission])
-            .map((step, index) => {
-              const isActive = step.isActive
-                ? step.isActive(location.pathname)
-                : location.pathname === step.link;
+          {/* .filter((step) => userPermissions[step.permission]) */}
+          {steps.map((step, index) => {
+            const isActive = step.isActive
+              ? step.isActive(location.pathname)
+              : location.pathname === step.link;
 
-              return (
-                <Link
-                  to={step.link}
-                  key={index}
-                  className={`flex items-center w-full hover:bg-primary3 hover:border hover:border-r-4 rounded-lg p-2 transition-all duration-300 ${
-                    isActive
-                      ? "bg-primary3 border border-r-4 border-r-sec5"
-                      : ""
+            return (
+              <Link
+                to={step.link}
+                key={index}
+                className={`flex items-center w-full hover:bg-primary3 hover:border hover:border-r-4 rounded-lg p-2 transition-all duration-300 ${
+                  isActive ? "bg-primary3 border border-r-4 border-r-sec5" : ""
+                }`}
+              >
+                <img
+                  src={step.icon}
+                  alt={step.label}
+                  className={` transition-all duration-300 ${
+                    isSidebarOpen ? "mr-3 w-6 h-6" : "w-24 h-6"
                   }`}
-                >
-                  <img
-                    src={step.icon}
-                    alt={step.label}
-                    className={` transition-all duration-300 ${
-                      isSidebarOpen ? "mr-3 w-6 h-6" : "w-24 h-6"
+                />
+                {isSidebarOpen && (
+                  <Heading
+                    level={4}
+                    size="lg"
+                    lineHeight="leading-1"
+                    color={isActive ? "primary4" : "primary4"}
+                    className={`font-semibold xl:text-[13px] lg:text-[11px] ${
+                      isActive ? "font-bold" : "font-normal"
                     }`}
-                  />
-                  {isSidebarOpen && (
-                    <Heading
-                      level={4}
-                      size="lg"
-                      lineHeight="leading-1"
-                      color={isActive ? "primary4" : "primary4"}
-                      className={`font-semibold xl:text-[13px] lg:text-[11px] ${
-                        isActive ? "font-bold" : "font-normal"
-                      }`}
-                    >
-                      {step.label}
-                    </Heading>
-                  )}
-                </Link>
-              );
-            })}
+                  >
+                    {step.label}
+                  </Heading>
+                )}
+              </Link>
+            );
+          })}
           <div className="w-full border-t-2 border-sec6">
             <div
               className={`font-semibold py-2 ${isSidebarOpen ? "" : "hidden"}`}
@@ -198,9 +195,7 @@ const DashboardLayout = ({ children }) => {
                   to={step.link}
                   key={index}
                   className={`flex items-center w-full hover:bg-primary3 rounded-lg p-2 transition-all duration-300 ${
-                    isActive
-                      ? "bg-primary3"
-                      : ""
+                    isActive ? "bg-primary3" : ""
                   }`}
                 >
                   <img
@@ -303,7 +298,7 @@ const DashboardLayout = ({ children }) => {
               /> */}
 
               <img
-                src={Avatar}
+                src={user?.profileData?.imageUrl || Avatar}
                 alt="user image"
                 className="rounded-full border-2 border-primary5 bg-primary5 w-8 h-8 mr-2"
               />
@@ -316,7 +311,7 @@ const DashboardLayout = ({ children }) => {
                   lineHeight="leading-none"
                   className="text-sm"
                 >
-                  {user.fullName}
+                  {user?.user?.fullName}
                 </TextSpan>
                 <TextSpan
                   size=""
@@ -325,7 +320,7 @@ const DashboardLayout = ({ children }) => {
                   lineHeight="leading-none"
                   className="text-xs"
                 >
-                  {user.role}
+                  {/* {user.role} */}
                 </TextSpan>
               </div>
               {/* Notification Dropdown */}
