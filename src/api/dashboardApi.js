@@ -17,7 +17,214 @@ const allUserInformation = async ({ accessToken, refreshToken, userEmail }) => {
     );
   }
 };
+const checkIn = async ({ accessToken, refreshToken, email, code }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.post(`${PLAIN_API_URL}/staff/checkin`, {
+      email: email,
+      code: code,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
+const requestForm = async ({ accessToken, refreshToken, userId, formData }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.post(`${PLAIN_API_URL}/leave-request`, {
+      userId,
+      type: formData.type,
+      from: formData.from,
+      to: formData.to,
+      shortDescription: formData.reason,
+      reportingOfficerId: formData.reportingStaff,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
+const getreportingStaff = async ({ accessToken, refreshToken, email }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.post(
+      `${PLAIN_API_URL}/reporting-officer`,
+      {
+        email,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
+
+const getTaskAssigner = async ({ accessToken, refreshToken, userId }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(
+      `${PLAIN_API_URL}/task/assigner/${userId}`
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to get task assigner"
+    );
+  }
+};
+
+const getTaskAssignee = async ({ accessToken, refreshToken, userEmail }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.post(`${PLAIN_API_URL}/assignee`, {
+      email: userEmail,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to get task assignee"
+    );
+  }
+};
+const getTotalProject = async ({ accessToken, refreshToken, userId }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(`${PLAIN_API_URL}/tasks/${userId}`);
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to get all project"
+    );
+  }
+};
+const getAttendance = async ({ accessToken, refreshToken, filter, userId }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(
+      `${PLAIN_API_URL}/attendance/${userId}?type=${filter}`
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to get all project"
+    );
+  }
+};
+
+const addTask = async ({ accessToken, refreshToken, userId, formData }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.post(`${PLAIN_API_URL}/task`, {
+      userId,
+      name: formData.taskName,
+      assignerId: formData.assignedBy,
+      assigneeId: formData.assignedTo,
+      duration: formData.duration,
+      startingDate: formData.startDate,
+      endDate: formData.endDate,
+      shortDescription: formData.reason,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
+
+const submitAnonymousMessage = async ({
+  accessToken,
+  refreshToken,
+  formData,
+}) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.post(
+      `${PLAIN_API_URL}/anonymous-suggestion`,
+      {
+        department: "Dimp",
+        suggestion: formData.message,
+        additionaldetails: formData.reason,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
+
+const submitHelpCenterMessage = async ({
+  accessToken,
+  refreshToken,
+  formData,
+  userId,
+  department,
+}) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.post(
+      `${PLAIN_API_URL}/createSupportTicket`,
+      {
+        userId,
+        department: department,
+        message: formData.message,
+        reason: formData.reason,
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
+
+const getSuggestionByDept = async ({
+  accessToken,
+  refreshToken,
+  department,
+}) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(
+      `${PLAIN_API_URL}/suggestion/${department}`
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
 
 export default {
   allUserInformation,
+  checkIn,
+  requestForm,
+  addTask,
+  getreportingStaff,
+  submitAnonymousMessage,
+  getSuggestionByDept,
+  submitHelpCenterMessage,
+  getTaskAssigner,
+  getTaskAssignee,
+  getTotalProject,
+  getAttendance,
 };

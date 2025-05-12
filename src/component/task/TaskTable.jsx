@@ -72,7 +72,8 @@ const TaskTable = () => {
               </th>
               <th className="p-3">NAME</th>
               <th className="p-3">ASSIGNED BY</th>
-              <th className="p-3">PRIORITY</th>
+              <th className="p-3">ASSIGNED TO</th>
+              {/* <th className="p-3">PRIORITY</th> */}
               <th className="p-3">START DATE</th>
               <th className="p-3">END DATE</th>
               <th className="p-3">DESCRIPTION</th>
@@ -88,7 +89,8 @@ const TaskTable = () => {
                 </td>
                 <td className="p-3">{task.name}</td>
                 <td className="p-3">{task.assigned}</td>
-                <td className="p-3">
+                <td className="p-3">{task.assigned}</td>
+                {/* <td className="p-3">
                   <select
                     className={`px-3 py-1 rounded-lg text-sm font-semibold ${
                       task.priority === "High"
@@ -100,7 +102,7 @@ const TaskTable = () => {
                   >
                     <option>{task.priority}</option>
                   </select>
-                </td>
+                </td> */}
                 <td className="p-3">{task.startDate}</td>
                 <td className="p-3">{task.endDate}</td>
                 <td className="p-3">{task.description}</td>

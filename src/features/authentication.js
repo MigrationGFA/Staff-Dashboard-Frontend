@@ -45,9 +45,9 @@ const authSlice = createSlice({
       })
       .addCase(adminLogin.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.user = action.payload.user;
-        state.accessToken = action.payload.accessToken;
-        state.refreshToken = action.payload.refreshToken;
+        state.user = action.payload.data.user;
+        state.accessToken = action.payload.data.accessToken;
+        state.refreshToken = action.payload.data.refreshToken;
         state.error = null;
       })
       .addCase(adminLogin.rejected, (state, action) => {

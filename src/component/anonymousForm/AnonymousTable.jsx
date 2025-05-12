@@ -1,50 +1,35 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaFilter, FaPlus } from "react-icons/fa";
 import { ButtonSmallPurple, ButtonSmallWhite } from "../Buttons";
-import AddTaskModal from "../modals/AddTaskModal";
-import EditTaskModal from "../modals/EditTaskModal";
 import { useNavigate } from "react-router-dom";
 import ViewAnonymousModal from "../modals/ViewAnonymousModal";
+import api from "../../api/dashboardApi";
+import { useSelector } from "react-redux";
 
 const AnonymousTable = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = useState(false);
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      name: "Design 1",
-      assigned: "Mr Debo",
-      duration: "2 Weeks",
-      date: "Jan 6, 2025",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      name: "Design 2",
-      assigned: "Mr Sam",
-      duration: "2 Weeks",
-      date: "Jan 11, 2025",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      name: "Design 3",
-      assigned: "Mr Amez",
-      duration: "3 Days",
-      date: "Jan 12, 2025",
-      status: "In Progress",
-    },
-    {
-      id: 4,
-      name: "Design 4",
-      assigned: "Mr Oboige",
-      duration: "1 Month",
-      date: "Jan 10, 2025",
-      status: "In Progress",
-    },
-  ]);
-
+  const [messages, setMessages] = useState([]);
   const navigate = useNavigate();
+
+  const { accessToken, refreshToken } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.auth?.user);
+
+  useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const response = await api.getSuggestionByDept({
+          accessToken,
+          refreshToken,
+          department: user.department,
+        });
+        setMessages(response.suggestions);
+      } catch (error) {
+        console.error("Error fetching messages:", error);
+      }
+    };
+
+    fetchMessages();
+  }, []);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -105,7 +90,7 @@ const AnonymousTable = () => {
             </tr>
           </thead>
           <tbody>
-            {messages.map((task) => (
+            {messages?.map((task) => (
               <tr key={task.id} className="border-t text-sec11">
                 <td className="p-3">{task.name}</td>
                 <td className="p-3">{task.assigned}</td>
@@ -128,7 +113,7 @@ const AnonymousTable = () => {
         </table>
       </div>
 
-      {/* Edit Task Modal */}
+      {/* View Anonymous Modal */}
       <ViewAnonymousModal
         isOpen={isAnonymousModalOpen}
         onClose={() => setIsAnonymousModalOpen(false)}

@@ -3,7 +3,7 @@ import { updateAccessToken } from "../features/authentication";
 
 // Define your API endpoints
 
-const API_URL = `${import.meta.env.VITE_API_URL}/admin`;
+const API_URL = `${import.meta.env.VITE_API_URL}`;
 const PLAIN_API_URL = `${import.meta.env.VITE_API_URL}`;
 
 const adminLogin = async ({ email, password }) => {
@@ -27,7 +27,7 @@ const adminForgetPassword = async ({ email }) => {
   } catch (error) {
     throw new Error(error.response?.data?.message || "Registration failed");
   }
-};
+};  
 
 const adminResetPassword = async ({ email, newPassword }) => {
   try {
