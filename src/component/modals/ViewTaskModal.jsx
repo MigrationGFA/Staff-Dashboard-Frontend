@@ -1,7 +1,37 @@
+import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { MdNoteAdd } from "react-icons/md";
+import { useSelector } from "react-redux";
+import api from "../../api/dashboardApi";
 
-const ViewTaskModal = ({ isOpen, onClose }) => {
+const ViewTaskModal = ({ isOpen, onClose, id }) => {
+  const { accessToken, refreshToken } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.auth.user);
+  const [viewDetails, setViewDetails] = useState([]);
+
+  const fetchViewDetails = async () => {
+    try {
+      const response = await api.getTaskDetails({
+        accessToken,
+        refreshToken,
+        taskId: id,
+      });
+      setViewDetails(response.result);
+      console.log(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchViewDetails();
+  }, [accessToken, refreshToken, id]);
+
+  const formatDate = (dateString) => {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -10,7 +40,7 @@ const ViewTaskModal = ({ isOpen, onClose }) => {
         {/* Header */}
         <div className="flex justify-between items-center border-b pb-3">
           <div className="flex items-center gap-2 text-purple-600">
-            <MdNoteAdd size={30}/>
+            <MdNoteAdd size={30} />
             <div>
               <h2 className="text-lg font-semibold">Task</h2>
               <p className="text-xs text-gray-500">Manage all tasks</p>
@@ -28,28 +58,32 @@ const ViewTaskModal = ({ isOpen, onClose }) => {
         <div className="mt-4 space-y-3 text-sm text-gray-700">
           <p>
             <span className="font-semibold">Task Name:</span>{" "}
-            <span className="ml-2">Design 1</span>
+            <span className="ml-2">{viewDetails?.name}</span>
           </p>
           <p>
             <span className="font-semibold">Assigned By:</span>{" "}
-            <span className="ml-2">Samuel Bashir</span>
+            <span className="ml-2">{viewDetails?.assignedBy}</span>
           </p>
           <p>
             <span className="font-semibold">Duration:</span>{" "}
-            <span className="ml-2 font-medium text-purple-600">2 weeks</span>
+            <span className="ml-2 font-medium text-purple-600">
+              {viewDetails?.duration}
+            </span>
           </p>
           <p>
             <span className="font-semibold">Start Date:</span>{" "}
-            <span className="ml-2">22/00/0000</span>
+            <span className="ml-2">
+              {formatDate(viewDetails?.startingDate)}
+            </span>
           </p>
           <p>
             <span className="font-semibold">End Date:</span>{" "}
-            <span className="ml-2">22/01/2026</span>
+            <span className="ml-2">{formatDate(viewDetails?.endDate)}</span>
           </p>
-          <p>
+          {/* <p>
             <span className="font-semibold">Date of Resumption:</span>{" "}
             <span className="ml-2">01/01/2025</span>
-          </p>
+          </p> */}
 
           {/* Description */}
           <div className="mt-3">
@@ -59,6 +93,7 @@ const ViewTaskModal = ({ isOpen, onClose }) => {
             <textarea
               className="w-full h-20 p-2 border border-gray-300 rounded-lg text-gray-500 bg-gray-50 cursor-not-allowed"
               placeholder="Briefly describe..."
+              value={viewDetails?.shortDescription}
               disabled
             />
           </div>

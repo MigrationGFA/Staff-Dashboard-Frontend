@@ -13,8 +13,12 @@ const OverviewDailyProjectStats = () => {
 
   const fetchStaffProgress = async () => {
     try {
-      const response = await api.getTotalProject({ accessToken, refreshToken });
-      setStaffProgress(response);
+      const response = await api.getOngoingTasks({
+        accessToken,
+        refreshToken,
+        userId: user.userId,
+      });
+      setStaffProgress(response.ongoingTasks);
     } catch (error) {
       console.log(error);
     }
@@ -70,7 +74,7 @@ const OverviewDailyProjectStats = () => {
           >
             <div className="w-full flex items-center justify-between p-4">
               <TextSpan size="" color="" className="text-sec3">
-                {item.task}
+                {item.name}
               </TextSpan>
               <TextSpan size="" color="" className="text-sec10">
                 {item.status}
@@ -78,7 +82,7 @@ const OverviewDailyProjectStats = () => {
             </div>
             <div className="w-full">
               <ProgressBar
-                completed={item.value}
+                completed={item?.percentage.split("%")[0]}
                 maxCompleted={100}
                 bgColor="#9F68FE"
               />

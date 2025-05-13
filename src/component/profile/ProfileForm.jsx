@@ -1,27 +1,38 @@
 import { useState, useEffect } from "react";
 import { ButtonSmallPurple } from "../Buttons";
 import { useSelector } from "react-redux";
-import api from "../../api/dashboardApi"
+import api from "../../api/dashboardApi";
+import { showToast } from "../ShowToast";
 
 const ProfileForm = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const user = useSelector((state) => state.auth.user);
 
-  const [profileImage, setProfileImage] = useState(null);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  };
+
+  const [profileImage, setProfileImage] = useState(
+    user?.profileData?.imageUrl || null
+  );
   const [formData, setFormData] = useState({
     fullName: user?.profileData?.fullName || "",
     email: user?.email || "",
-    dateOfBirth: user?.profileData?.dob || "",
+    dateOfBirth: user?.profileData?.dob ? formatDate(user.profileData.dob) : "",
     department: user?.department || "",
     role: user?.role || "",
     contractType: user?.contractType || "",
     phoneNumber: user?.phoneNumber || "",
     homeAddress: user?.homeAddress || "",
-    maritalStatus: user?.maritalStatus || "",
+    maritalStatus: user?.profileData?.maritalStatus || "",
     nextOfKin: user?.nextOfKin || "",
     nextOfKinAddress: user?.nextOfKinAddress || "",
-    nextOfKinContact: user?.nextOfKinContact || "",
-    medicalStatus: user?.medicalStatus || "",
+    nextOfKinContact: user?.profileData?.nextOfKinContact || "",
+    medicalStatus: user?.profileData?.medicalStatus || "",
   });
 
   useEffect(() => {
@@ -29,16 +40,18 @@ const ProfileForm = () => {
       setFormData({
         fullName: user.profileData?.fullName || "",
         email: user.email || "",
-        dateOfBirth: user.profileData?.dob || "",
+        dateOfBirth: user.profileData?.dob
+          ? formatDate(user.profileData.dob)
+          : "",
         department: user.department || "",
         role: user.role || "",
-        contractType: user.contractType || "",
+        contractType: user.profileData?.contractType || "",
         phoneNumber: user.profileData?.phone || "",
         homeAddress: user.profileData?.address || "",
         maritalStatus: user.profileData?.maritalStatus || "",
         nextOfKin: user.profileData?.nextOfKinName || "",
-        nextOfKinAddress: user.nextOfKinAddress || "",
-        nextOfKinContact: user.nextOfKinContact || "",
+        nextOfKinAddress: user.profileData?.nextOfKinAddress || "",
+        nextOfKinContact: user.profileData?.nextOfKinContact || "",
         medicalStatus: user.profileData?.medicalStatus || "",
       });
     }
@@ -60,10 +73,21 @@ const ProfileForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Submit the form data
-    console.log("Form submitted:", formData);
+    try {
+      const response = await api.profileForm({
+        accessToken,
+        refreshToken,
+        formData,
+        profileImage,
+        userId: user.userId,
+      });
+
+      showToast(response.message);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -134,17 +158,14 @@ const ProfileForm = () => {
 
         <div>
           <label className="block text-gray-600">Department</label>
-          <select
+          <input
+            type="text"
             name="department"
             value={formData.department}
             onChange={handleInputChange}
-            className="w-full rounded-lg focus:ring-primary11"
-          >
-            <option>-- Select Option --</option>
-            <option>Engineering</option>
-            <option>Marketing</option>
-            <option>HR</option>
-          </select>
+            className="w-full rounded-lg focus:ring-primary11 bg-primary6"
+            disabled
+          />
         </div>
 
         <div>
@@ -154,8 +175,9 @@ const ProfileForm = () => {
             name="role"
             value={formData.role}
             onChange={handleInputChange}
-            className="w-full rounded-lg focus:ring-primary11"
+            className="w-full rounded-lg focus:ring-primary11 bg-primary6"
             placeholder="Role"
+            disabled
           />
         </div>
 
@@ -206,10 +228,10 @@ const ProfileForm = () => {
             onChange={handleInputChange}
             className="w-full rounded-lg focus:ring-primary11"
           >
-            <option>-- Select Option --</option>
-            <option>Single</option>
-            <option>Married</option>
-            <option>Divorced</option>
+            <option value="-- Select Option --">-- Select Option --</option>
+            <option value="single">Single</option>
+            <option value="married">Married</option>
+            <option value="divorced">Divorced</option>
           </select>
         </div>
 

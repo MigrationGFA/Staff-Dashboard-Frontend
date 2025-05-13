@@ -1,44 +1,49 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaFilter, FaPlus } from "react-icons/fa";
 import { ButtonSmallPurple } from "../Buttons";
 import AddTaskModal from "../modals/AddTaskModal";
 import ViewTaskModal from "../modals/ViewTaskModal";
+import { useSelector } from "react-redux";
+import api from "../../api/dashboardApi";
 
 const TaskTable = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      name: "Design 1",
-      assigned: "Mr Debo",
-      priority: "High",
-      startDate: "22/02/2024",
-      endDate: "12/01/2025",
-      description: "Landing page...",
-      status: "Approved",
-    },
-    {
-      id: 2,
-      name: "Design 2",
-      assigned: "Mr Sam",
-      priority: "Medium",
-      startDate: "22/02/2025",
-      endDate: "12/01/2025",
-      description: "Edit screen...",
-      status: "In progress",
-    },
-    {
-      id: 3,
-      name: "Design 3",
-      assigned: "Mr Azeez",
-      priority: "Low",
-      startDate: "22/02/2025",
-      endDate: "12/01/2025",
-      description: "Pop-up screen...",
-      status: "Completed",
-    },
-  ]);
+  const [selectedTaskId, setSelectedTaskId] = useState(null);
+  const { accessToken, refreshToken } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.auth.user);
+  const [tasks, setTasks] = useState([]);
+
+  const fetchTasks = async () => {
+    try {
+      const response = await api.getTotalProject({
+        accessToken,
+        refreshToken,
+        userId: user.userId,
+      });
+
+      const tasksFromResponse = response.result.tasksAssignedToUser.map(
+        (task) => ({
+          id: task._id,
+          name: task.name,
+          assignedBy: task.assignerId,
+          assignedTo: task.assigneeId,
+          startDate: new Date(task.startingDate).toLocaleDateString(),
+          endDate: new Date(task.endDate).toLocaleDateString(),
+          description: task.shortDescription,
+          status: task.status,
+        })
+      );
+
+      setTasks(tasksFromResponse);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [accessToken, refreshToken]);
 
   return (
     <div className="p-5 bg-white rounded-lg shadow-lg mb-4">
@@ -67,13 +72,9 @@ const TaskTable = () => {
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-gray-100 text-gray-700">
-              <th className="p-3">
-                <input type="checkbox" />
-              </th>
               <th className="p-3">NAME</th>
               <th className="p-3">ASSIGNED BY</th>
               <th className="p-3">ASSIGNED TO</th>
-              {/* <th className="p-3">PRIORITY</th> */}
               <th className="p-3">START DATE</th>
               <th className="p-3">END DATE</th>
               <th className="p-3">DESCRIPTION</th>
@@ -84,37 +85,31 @@ const TaskTable = () => {
           <tbody>
             {tasks.map((task) => (
               <tr key={task.id} className="border-t text-gray-700">
-                <td className="p-3">
-                  <input type="checkbox" />
-                </td>
                 <td className="p-3">{task.name}</td>
-                <td className="p-3">{task.assigned}</td>
-                <td className="p-3">{task.assigned}</td>
-                {/* <td className="p-3">
-                  <select
-                    className={`px-3 py-1 rounded-lg text-sm font-semibold ${
-                      task.priority === "High"
-                        ? "bg-pink-100 text-pink-600"
-                        : task.priority === "Medium"
-                        ? "bg-orange-100 text-orange-600"
-                        : "bg-blue-100 text-blue-600"
-                    }`}
-                  >
-                    <option>{task.priority}</option>
-                  </select>
-                </td> */}
+                <td className="p-3">{task.assignedBy}</td>
+                <td className="p-3">{task.assignedTo}</td>
                 <td className="p-3">{task.startDate}</td>
                 <td className="p-3">{task.endDate}</td>
                 <td className="p-3">{task.description}</td>
-                <td className="p-3">
-                  <select className="px-3 py-1 rounded-lg text-sm font-semibold">
-                    <option>{task.status}</option>
-                  </select>
+                <td className="p-3 italic">
+                  <span
+                    className={`px-3 py-1 rounded-lg text-sm font-semibold ${
+                      task.status === "pending"
+                        ? "bg-yellow-300 text-yellow-800"
+                        : "bg-green-300 text-green-800"
+                    }`}
+                  >
+                    {task.status}
+                  </span>
                 </td>
                 <td className="p-3">
                   <ButtonSmallPurple
                     className="px-4 py-1 rounded-lg"
-                    onClick={() => setIsEditModalOpen(true)}
+                    onClick={() => {
+                      setSelectedTaskId(task.id);
+                      setIsEditModalOpen(true);
+                      console.log("task id check:", task.id);
+                    }}
                   >
                     View
                   </ButtonSmallPurple>
@@ -132,6 +127,7 @@ const TaskTable = () => {
       <ViewTaskModal
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
+        id={selectedTaskId}
       />
     </div>
   );

@@ -1,44 +1,30 @@
 import { FaPlus } from "react-icons/fa";
 import { ButtonSmallPurple } from "../Buttons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddStaffModal from "../modals/AddStaffModal";
+import { useSelector } from "react-redux";
+import api from "../../api/dashboardApi";
 
 const StaffTable = () => {
+  const { accessToken, refreshToken } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.auth.user);
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      name: "Design 1",
-      assigned: "Mr Debo",
-      duration: "2 Weeks",
-      date: "Jan 6, 2025",
-      status: "Completed",
-    },
-    {
-      id: 2,
-      name: "Design 2",
-      assigned: "Mr Sam",
-      duration: "2 Weeks",
-      date: "Jan 11, 2025",
-      status: "Pending",
-    },
-    {
-      id: 3,
-      name: "Design 3",
-      assigned: "Mr Amez",
-      duration: "3 Days",
-      date: "Jan 12, 2025",
-      status: "In Progress",
-    },
-    {
-      id: 4,
-      name: "Design 4",
-      assigned: "Mr Oboige",
-      duration: "1 Month",
-      date: "Jan 10, 2025",
-      status: "In Progress",
-    },
-  ]);
+  const [staff, setStaff] = useState([]);
+
+  const fetchStaffData = async () => {
+    try {
+      const response = await api.getStaffDetails({ accessToken, refreshToken });
+      setStaff(response);
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchStaffData();
+  }, [accessToken, refreshToken]);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -59,7 +45,11 @@ const StaffTable = () => {
         <h2 className="text-2xl font-bold text-sec11">STAFF</h2>
         {/* Search & Filter */}
         <div className="flex items-center gap-4">
-          <input type="text" placeholder="Search" className="rounded-lg focus:ring-primary11" />
+          <input
+            type="text"
+            placeholder="Search"
+            className="rounded-lg focus:ring-primary11"
+          />
           <ButtonSmallPurple
             padding=""
             width=""
@@ -84,7 +74,7 @@ const StaffTable = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
+            {staff?.map((task) => (
               <tr key={task.id} className="border-t text-sec11">
                 <td className="p-3">{task.name}</td>
                 <td className="p-3">{task.assigned}</td>
@@ -104,7 +94,7 @@ const StaffTable = () => {
           </tbody>
         </table>
       </div>
-      
+
       {/* Add Staff Modal */}
       <AddStaffModal
         isOpen={isModalOpen}
