@@ -26,8 +26,8 @@ const TaskTable = () => {
         (task) => ({
           id: task._id,
           name: task.name,
-          assignedBy: task.assignerId,
-          assignedTo: task.assigneeId,
+          assignedBy: task.assignedBy,
+          assignedTo: task.assignedTo,
           startDate: new Date(task.startingDate).toLocaleDateString(),
           endDate: new Date(task.endDate).toLocaleDateString(),
           description: task.shortDescription,
