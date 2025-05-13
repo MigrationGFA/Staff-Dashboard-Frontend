@@ -31,6 +31,7 @@ const checkIn = async ({ accessToken, refreshToken, email, code }) => {
     throw new Error(error.response?.data?.message || "Unable to check-In");
   }
 };
+
 const requestForm = async ({ accessToken, refreshToken, userId, formData }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
@@ -43,6 +44,36 @@ const requestForm = async ({ accessToken, refreshToken, userId, formData }) => {
       shortDescription: formData.reason,
       reportingOfficerId: formData.reportingStaff,
     });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
+
+const profileForm = async ({
+  accessToken,
+  refreshToken,
+  userId,
+  formData,
+  profileImage,
+}) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.put(
+      `${PLAIN_API_URL}/update-profile/${userId}`,
+      {
+        fullName: formData.fullName,
+        dob: formData.dateOfBirth,
+        email: formData.email,
+        phone: formData.phoneNumber,
+        address: formData.homeAddress,
+        nextOfKinName: formData.nextOfKin,
+        medicalDescription: formData.medicalStatus,
+        image: profileImage,
+      }
+    );
 
     return response.data;
   } catch (error) {
@@ -110,6 +141,23 @@ const getTotalProject = async ({ accessToken, refreshToken, userId }) => {
     );
   }
 };
+
+const getOngoingTasks = async ({ accessToken, refreshToken, userId }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(
+      `${PLAIN_API_URL}/ongoingTask/${userId}`
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to get all project"
+    );
+  }
+};
+
 const getAttendance = async ({ accessToken, refreshToken, filter, userId }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
@@ -126,6 +174,33 @@ const getAttendance = async ({ accessToken, refreshToken, filter, userId }) => {
   }
 };
 
+const getTaskDetails = async ({ accessToken, refreshToken, taskId }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(`${PLAIN_API_URL}/view/${taskId}`);
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to get Task Details"
+    );
+  }
+};
+
+const getStaffDetails = async ({ accessToken, refreshToken }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(`${PLAIN_API_URL}/get-profile`);
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to get staff Details"
+    );
+  }
+};
 const addTask = async ({ accessToken, refreshToken, userId, formData }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
@@ -227,4 +302,8 @@ export default {
   getTaskAssignee,
   getTotalProject,
   getAttendance,
+  getOngoingTasks,
+  getTaskDetails,
+  profileForm,
+  getStaffDetails,
 };
