@@ -27,22 +27,22 @@ const Onboarding = () => {
     formState: { errors },
   } = useForm({ resolver: yupResolver(onboardingSchema) });
 
-  const fetchReportingStaff = async () => {
-    try {
-      const response = await api.getreportingStaff({
-        accessToken,
-        refreshToken,
-        email: user.email,
-      });
-      setReportingStaff(Array.isArray(response) ? response : [response]);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // const fetchReportingStaff = async () => {
+  //   try {
+  //     const response = await api.getreportingStaff({
+  //       accessToken,
+  //       refreshToken,
+  //       email: user.email,
+  //     });
+  //     setReportingStaff(Array.isArray(response) ? response : [response]);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
 
-  useEffect(() => {
-    fetchReportingStaff();
-  }, [accessToken, refreshToken]);
+  // useEffect(() => {
+  //   // fetchReportingStaff();
+  // }, [accessToken, refreshToken]);
 
   const onSubmit = async (data) => {
     try {
