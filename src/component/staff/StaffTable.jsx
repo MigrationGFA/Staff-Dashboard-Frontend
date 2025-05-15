@@ -14,7 +14,11 @@ const StaffTable = () => {
 
   const fetchStaffData = async () => {
     try {
-      const response = await api.getStaffDetails({ accessToken, refreshToken });
+      const response = await api.getStaffDetails({
+        accessToken,
+        refreshToken,
+        department: user?.department,
+      });
       setStaff(response);
       console.log(response);
     } catch (error) {

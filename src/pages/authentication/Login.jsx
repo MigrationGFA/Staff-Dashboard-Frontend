@@ -56,11 +56,17 @@ const Login = () => {
         showToast(errorPayload);
       } else if (adminLogin.fulfilled.match(resultAction)) {
         showToast(resultAction.payload.message);
-        navigate("/overview");
+        const userData = resultAction.payload.data;
+
+        if (!userData.isProfileCreated) {
+          navigate("/onboarding");
+        } else {
+          navigate("/overview");
+        }
       }
     } catch (error) {
       // Handle unexpected errors, such as network issues
-      showToast("An unexpected error occurred. Please try again.");
+      showToast(error || "An unexpected error occurred. Please try again.");
     }
   };
 

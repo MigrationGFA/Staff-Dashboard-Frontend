@@ -16,6 +16,7 @@ import Training from "../pages/Training";
 import AnonymousMessagePage from "./anonymousForm/AnonymousMessagePage";
 import HelpCenterMessagePage from "./help-center/HelpCenterMessagePage";
 import Overview from "../pages/Overview";
+import Onboarding from "../pages/authentication/Onboarding";
 
 const AllRoutes = () => {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
@@ -76,6 +77,7 @@ const AllRoutes = () => {
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password/:email" element={<ResetPassword />} />
         <Route path="/otp-verification/:email" element={<VerifyOtp />} />
+        <Route path="/onboarding" element={<Onboarding />} />
 
         {/* Dashboard Routes */}
         <Route path="/overview" element={<Overview />} />

@@ -298,7 +298,7 @@ const DashboardLayout = ({ children }) => {
               /> */}
 
               <img
-                src={user?.profileData?.imageUrl || Avatar}
+                src={user?.profile?.imageUrl || Avatar}
                 alt="user image"
                 className="rounded-full border-2 border-primary5 bg-primary5 w-8 h-8 mr-2"
               />

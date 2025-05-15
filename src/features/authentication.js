@@ -10,7 +10,7 @@ const initialState = {
   error: null,
 };
 
-// admin login
+// staff login
 export const adminLogin = createAsyncThunk(
   "authLogin",
   async ({ email, password }, { rejectWithValue }) => {
@@ -19,6 +19,28 @@ export const adminLogin = createAsyncThunk(
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data?.message || error.message);
+    }
+  }
+);
+
+// staff onboarding
+export const completeOnboarding = createAsyncThunk(
+  "auth/completeOnboarding",
+  async (
+    { accessToken, refreshToken, userId, payload },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await api.onboarding({
+        accessToken,
+        refreshToken,
+        userId,
+        payload,
+      });
+      console.log("onboarding response:", response.data);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.message || error.message);
     }
   }
 );
@@ -52,6 +74,17 @@ const authSlice = createSlice({
       })
       .addCase(adminLogin.rejected, (state, action) => {
         state.isLoading = false;
+        state.error = action.payload;
+      })
+      .addCase(completeOnboarding.fulfilled, (state, action) => {
+        state.user = {
+          ...state.user,
+          ...action.payload,
+        };
+        console.log("After:", state.user);
+        state.error = null;
+      })
+      .addCase(completeOnboarding.rejected, (state, action) => {
         state.error = action.payload;
       });
   },
