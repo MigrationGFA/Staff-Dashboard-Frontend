@@ -2,7 +2,8 @@ import { Heading, TextSpan } from "./Text";
 import { useSelector } from "react-redux"; // Ensure you import useSelector
 
 const Welcome = ({ header, message }) => {
-  const user = useSelector((state) => state?.auth?.user.profileData);
+  const user = useSelector((state) => state?.auth?.user.profile);
+  const onboardedUser = useSelector((state) => state?.auth?.user);
   const userRole = useSelector((state) => state?.auth?.user?.role);
   const defaultMessage = user ? (
     <TextSpan
@@ -11,7 +12,7 @@ const Welcome = ({ header, message }) => {
     >
       Hi{" "}
       <div className="font-semibold ms-1">
-        {user?.fullName}
+        {onboardedUser?.fullName || user?.fullName}
       </div>
       , welcome back to your Dashboard
       {/* to Dimp {userRole || "Admin"}! */}

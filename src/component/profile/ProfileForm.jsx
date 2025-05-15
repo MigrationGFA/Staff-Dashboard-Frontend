@@ -17,42 +17,46 @@ const ProfileForm = () => {
   };
 
   const [profileImage, setProfileImage] = useState(
-    user?.profileData?.imageUrl || null
+    user?.profile?.imageUrl || null
   );
   const [formData, setFormData] = useState({
-    fullName: user?.profileData?.fullName || "",
+    fullName: user?.fullName || user?.profile?.fullName || "",
     email: user?.email || "",
-    dateOfBirth: user?.profileData?.dob ? formatDate(user.profileData.dob) : "",
+    dateOfBirth: user?.profile?.dob ? formatDate(user.profile.dob) : "",
     department: user?.department || "",
     role: user?.role || "",
     contractType: user?.contractType || "",
-    phoneNumber: user?.phoneNumber || "",
-    homeAddress: user?.homeAddress || "",
-    maritalStatus: user?.profileData?.maritalStatus || "",
-    nextOfKin: user?.nextOfKin || "",
+    phoneNumber: user?.phone || user?.phoneNumber || "",
+    homeAddress: user?.address || user?.homeAddress || "",
+    maritalStatus: user?.maritalStatus || user?.profile?.maritalStatus || "",
+    nextOfKin: user?.nextOfKinName || user?.nextOfKin || "",
     nextOfKinAddress: user?.nextOfKinAddress || "",
-    nextOfKinContact: user?.profileData?.nextOfKinContact || "",
-    medicalStatus: user?.profileData?.medicalStatus || "",
+    nextOfKinContact:
+      user?.nextOfKinContact || user?.profile?.nextOfKinContact || "",
+    medicalStatus: user?.medicalStatus || user?.profile?.medicalStatus || "",
   });
 
   useEffect(() => {
     if (user) {
       setFormData({
-        fullName: user.profileData?.fullName || "",
+        fullName: user?.fullName || user.profile?.fullName || "",
         email: user.email || "",
-        dateOfBirth: user.profileData?.dob
-          ? formatDate(user.profileData.dob)
-          : "",
+        dateOfBirth:
+          user?.dob || user.profile?.dob
+            ? formatDate(user.dob) || formatDate(user.profile.dob)
+            : "",
         department: user.department || "",
         role: user.role || "",
-        contractType: user.profileData?.contractType || "",
-        phoneNumber: user.profileData?.phone || "",
-        homeAddress: user.profileData?.address || "",
-        maritalStatus: user.profileData?.maritalStatus || "",
-        nextOfKin: user.profileData?.nextOfKinName || "",
-        nextOfKinAddress: user.profileData?.nextOfKinAddress || "",
-        nextOfKinContact: user.profileData?.nextOfKinContact || "",
-        medicalStatus: user.profileData?.medicalStatus || "",
+        contractType: user?.contractType || user.profile?.contractType || "",
+        phoneNumber: user?.phone || user.profile?.phone || "",
+        homeAddress: user?.address || user.profile?.address || "",
+        maritalStatus: user?.maritalStatus || user.profile?.maritalStatus || "",
+        nextOfKin: user?.nextOfKinName || user.profile?.nextOfKinName || "",
+        nextOfKinAddress:
+          user?.nextOfKinAddress || user.profile?.nextOfKinAddress || "",
+        nextOfKinContact:
+          user?.nextOfKinContact || user.profile?.nextOfKinContact || "",
+        medicalStatus: user?.medicalStatus || user.profile?.medicalStatus || "",
       });
     }
   }, [user]);
@@ -60,6 +64,18 @@ const ProfileForm = () => {
   const handleProfileImageChange = (event) => {
     const file = event.target.files[0];
     if (file) {
+      const maxSizeInMB = 3;
+      const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+      if (file.size > maxSizeInBytes) {
+        showToast(
+          `File size exceeds ${maxSizeInMB}MB. Please upload a smaller file.`,
+          "error"
+        );
+        event.target.value = ""; // Clear the file input
+        return;
+      }
+
       const reader = new FileReader();
       reader.onloadend = () => {
         setProfileImage(reader.result);
@@ -134,14 +150,15 @@ const ProfileForm = () => {
         </div>
 
         <div>
-          <label className="block text-gray-600">Email Address</label>
+          <label className="block text-gray-600 ">Email Address</label>
           <input
             type="email"
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full rounded-lg focus:ring-primary11"
+            className="w-full rounded-lg focus:ring-primary11 bg-primary6"
             placeholder="Email Address"
+            disabled
           />
         </div>
 
@@ -183,17 +200,14 @@ const ProfileForm = () => {
 
         <div>
           <label className="block text-gray-600">Contract Type</label>
-          <select
+          <input
+            type="text"
             name="contractType"
             value={formData.contractType}
             onChange={handleInputChange}
-            className="w-full rounded-lg focus:ring-primary11"
-          >
-            <option>-- Select Option --</option>
-            <option>Full-time</option>
-            <option>Part-time</option>
-            <option>Contract</option>
-          </select>
+            className="w-full rounded-lg focus:ring-primary11 bg-primary6"
+            disabled
+          />
         </div>
 
         <div>

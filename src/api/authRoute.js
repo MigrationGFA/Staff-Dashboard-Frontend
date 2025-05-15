@@ -1,5 +1,6 @@
 import axios from "axios";
 import { updateAccessToken } from "../features/authentication";
+import AxiosInterceptor from "../component/AxiosInterceptor";
 
 // Define your API endpoints
 
@@ -27,7 +28,7 @@ const adminForgetPassword = async ({ email }) => {
   } catch (error) {
     throw new Error(error.response?.data?.message || "Registration failed");
   }
-};  
+};
 
 const adminResetPassword = async ({ email, newPassword }) => {
   try {
@@ -52,9 +53,27 @@ const adminVerifyOtp = async ({ email, OTP }) => {
     throw new Error(error.response?.data?.message || "Password reset failed");
   }
 };
+
+const onboarding = async ({ accessToken, refreshToken, userId, payload }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.patch(
+      `${PLAIN_API_URL}/update-profile/${userId}`,
+      payload
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to retrieve all users"
+    );
+  }
+};
 export default {
   adminLogin,
   adminForgetPassword,
   adminResetPassword,
   adminVerifyOtp,
+  onboarding,
 };

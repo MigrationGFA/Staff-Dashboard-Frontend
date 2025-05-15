@@ -2,6 +2,24 @@ import AxiosInterceptor from "../component/AxiosInterceptor";
 
 const PLAIN_API_URL = `${import.meta.env.VITE_API_URL}`;
 
+//Onboarding Endpoint
+const onboarding = async ({ accessToken, refreshToken, payload }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.post(`${PLAIN_API_URL}/admin/signup`, {
+      payload,
+    });
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to retrieve all users"
+    );
+  }
+};
+
+// Dashboard Endpoints
 const allUserInformation = async ({ accessToken, refreshToken, userEmail }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
@@ -61,7 +79,7 @@ const profileForm = async ({
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
   try {
-    const response = await authFetch.put(
+    const response = await authFetch.patch(
       `${PLAIN_API_URL}/update-profile/${userId}`,
       {
         fullName: formData.fullName,
@@ -188,11 +206,13 @@ const getTaskDetails = async ({ accessToken, refreshToken, taskId }) => {
   }
 };
 
-const getStaffDetails = async ({ accessToken, refreshToken }) => {
+const getStaffDetails = async ({ accessToken, refreshToken, department }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
   try {
-    const response = await authFetch.get(`${PLAIN_API_URL}/get-profile`);
+    const response = await authFetch.get(
+      `${PLAIN_API_URL}/profile/department?department=${department}`
+    );
 
     return response.data;
   } catch (error) {
@@ -306,4 +326,5 @@ export default {
   getTaskDetails,
   profileForm,
   getStaffDetails,
+  onboarding,
 };
