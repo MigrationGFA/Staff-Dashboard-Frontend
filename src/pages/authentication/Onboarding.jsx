@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { onboardingSchema } from "../../data/OnboardingSchema";
+import { onboardingSchema } from "../../data/onboardingSchema";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { ButtonLongPurple } from "../../component/Buttons";
