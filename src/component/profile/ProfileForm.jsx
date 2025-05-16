@@ -79,7 +79,7 @@ const ProfileForm = () => {
           `File size exceeds ${maxSizeInMB}MB. Please upload a smaller file.`,
           "error"
         );
-        event.target.value = ""; // Clear the file input
+        event.target.value = "";
         return;
       }
 
