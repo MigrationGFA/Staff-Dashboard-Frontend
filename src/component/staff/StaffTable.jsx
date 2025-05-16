@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import AddStaffModal from "../modals/AddStaffModal";
 import { useSelector } from "react-redux";
 import api from "../../api/dashboardApi";
+import { formatDate } from "../../utils/dateHelper";
 
 const StaffTable = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
@@ -19,8 +20,8 @@ const StaffTable = () => {
         refreshToken,
         department: user?.department,
       });
-      setStaff(response);
-      console.log(response);
+      setStaff(response?.data);
+      console.log(response.data);
     } catch (error) {
       console.log(error);
     }
@@ -32,10 +33,10 @@ const StaffTable = () => {
 
   const getStatusClass = (status) => {
     switch (status) {
-      case "Completed":
+      case true:
         return "bg-green-100 text-green-600";
-      case "Pending":
-        return "bg-red-100 text-red-600";
+      case false:
+        return "bg-yellow-100 text-yellow-600";
       case "In Progress":
         return "bg-blue-100 text-blue-600";
       default:
@@ -78,23 +79,24 @@ const StaffTable = () => {
             </tr>
           </thead>
           <tbody>
-            {staff?.map((task) => (
-              <tr key={task.id} className="border-t text-sec11">
-                <td className="p-3">{task.name}</td>
-                <td className="p-3">{task.assigned}</td>
-                <td className="p-3">{task.duration}</td>
-                <td className="p-3">{task.date}</td>
-                <td className="p-3">
-                  <span
-                    className={`px-3 py-1 rounded-lg text-sm font-semibold ${getStatusClass(
-                      task.status
-                    )}`}
-                  >
-                    {task.status}
-                  </span>
-                </td>
-              </tr>
-            ))}
+            {staff.length > 0 &&
+              staff?.map((staff) => (
+                <tr key={staff.id} className="border-t text-sec11">
+                  <td className="p-3">{staff.profile?.fullName}</td>
+                  <td className="p-3">{staff.role}</td>
+                  <td className="p-3">{staff.contractType}</td>
+                  <td className="p-3">{formatDate(staff.dateOfResumption)}</td>
+                  <td className="p-3">
+                    <span
+                      className={`px-3 py-1 rounded-lg text-sm font-semibold ${getStatusClass(
+                        staff.fullProfile
+                      )}`}
+                    >
+                      {staff.fullProfile ? "Active" : "Pending"}
+                    </span>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
