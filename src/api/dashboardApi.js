@@ -89,6 +89,8 @@ const profileForm = async ({
         address: formData.homeAddress,
         nextOfKinName: formData.nextOfKin,
         medicalDescription: formData.medicalStatus,
+        maritalStatus: formData.maritalStatus,
+        nextOfKinContact: formData.nextOfKinContact,
         image: profileImage,
       }
     );
