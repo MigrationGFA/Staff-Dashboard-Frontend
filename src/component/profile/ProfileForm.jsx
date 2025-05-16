@@ -28,7 +28,10 @@ const ProfileForm = () => {
     contractType: user?.contractType || "",
     phoneNumber: user?.phone || user?.phoneNumber || "",
     homeAddress: user?.address || user?.homeAddress || "",
-    maritalStatus: user?.maritalStatus || user?.profile?.maritalStatus || "",
+    maritalStatus: user?.maritalStatus?.trim()
+      ? user.maritalStatus
+      : user?.profile?.maritalStatus || "",
+
     nextOfKin: user?.nextOfKinName || user?.nextOfKin || "",
     nextOfKinAddress: user?.nextOfKinAddress || "",
     nextOfKinContact:
@@ -41,16 +44,20 @@ const ProfileForm = () => {
       setFormData({
         fullName: user?.fullName || user.profile?.fullName || "",
         email: user.email || "",
-        dateOfBirth:
-          user?.dob || user.profile?.dob
-            ? formatDate(user.dob) || formatDate(user.profile.dob)
-            : "",
+        dateOfBirth: user?.profile?.dob
+          ? formatDate(user.profile.dob)
+          : user?.dob
+          ? formatDate(user.dob)
+          : "",
+
         department: user.department || "",
         role: user.role || "",
         contractType: user?.contractType || user.profile?.contractType || "",
         phoneNumber: user?.phone || user.profile?.phone || "",
         homeAddress: user?.address || user.profile?.address || "",
-        maritalStatus: user?.maritalStatus || user.profile?.maritalStatus || "",
+        maritalStatus: user?.maritalStatus?.trim()
+          ? user.maritalStatus
+          : user?.profile?.maritalStatus || "",
         nextOfKin: user?.nextOfKinName || user.profile?.nextOfKinName || "",
         nextOfKinAddress:
           user?.nextOfKinAddress || user.profile?.nextOfKinAddress || "",
