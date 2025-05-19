@@ -6,6 +6,8 @@ import LeaveGreatings from "./LeaveGreatings";
 import api from "../../api/dashboardApi";
 import { useSelector } from "react-redux";
 import { showToast } from "../ShowToast";
+import { FaSpinner } from "react-icons/fa";
+import LeaveStats from "./LeaveStats";
 
 const RequestForm = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
@@ -22,6 +24,9 @@ const RequestForm = () => {
     reason: "",
   });
   const [reportingStaff, setReportingStaff] = useState([]);
+  const [sickNoteImage, setSickNoteImage] = useState(null);
+  const [sickNotePreview, setSickNotePreview] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,18 +34,51 @@ const RequestForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("email", formData.email);
+      data.append("department", formData.department);
+      data.append("type", formData.type);
+      data.append("from", formData.from);
+      data.append("to", formData.to);
+      data.append("reportingOfficerId", formData.reportingStaff);
+      data.append("shortDescription", formData.reason);
+      data.append("userId", user.userId);
+
+      if (sickNoteImage) {
+        data.append("medicalImage", sickNoteImage);
+      }
+
       const response = await api.requestForm({
         accessToken,
         refreshToken,
-        userId: user.userId,
-        formData,
+        formData: data,
       });
 
-      showToast(response?.data?.message);
+      showToast(response?.message);
     } catch (error) {
-      console.log(error);
+      showToast(error?.message);
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+      resetForm();
     }
+  };
+
+  const resetForm = () => {
+    setFormData((prev) => ({
+      ...prev,
+      type: "",
+      from: "",
+      to: "",
+      reportingStaff: "",
+      reason: "",
+    }));
+    setSickNoteImage(null);
+    setSickNotePreview(null);
   };
 
   const fetchReportingStaff = async () => {
@@ -57,13 +95,38 @@ const RequestForm = () => {
   };
 
   useEffect(() => {
+    if (user) {
+      setFormData((prev) => ({
+        ...prev,
+        name: user?.profile?.fullName || "",
+        email: user?.email || "",
+        department: user?.department || "",
+        type: "",
+        from: "",
+        to: "",
+        reportingStaff: "",
+        reason: "",
+      }));
+    }
+  }, [user]);
+
+  useEffect(() => {
     fetchReportingStaff();
   }, [accessToken, refreshToken]);
+
+  useEffect(() => {
+    return () => {
+      if (sickNotePreview) {
+        URL.revokeObjectURL(sickNotePreview);
+      }
+    };
+  }, [sickNotePreview]);
 
   return (
     <div className="flex flex-col justify-center items-center space-y-4">
       <div className="lg:place-self-start w-full">
         <LeaveGreatings />
+        <LeaveStats />
       </div>
 
       <form
@@ -75,9 +138,11 @@ const RequestForm = () => {
           <input
             type="text"
             name="name"
+            value={user?.profile?.fullName}
             placeholder="Full name"
             onChange={handleChange}
-            className="rounded-lg focus:ring-primary11"
+            className="rounded-lg focus:ring-primary11 bg-primary6"
+            readOnly
           />
         </div>
         <div className="flex flex-col space-y-1">
@@ -85,44 +150,116 @@ const RequestForm = () => {
           <input
             type="email"
             name="email"
+            value={user?.email}
             placeholder="Email Address"
             onChange={handleChange}
-            className="rounded-lg focus:ring-primary11"
+            className="rounded-lg focus:ring-primary11 bg-primary6"
+            readOnly
           />
         </div>
 
         <div className="flex flex-col space-y-1">
           <label>Department</label>
-          <select
+          <input
+            type="text"
             name="department"
+            value={user?.department}
             onChange={handleChange}
-            className="rounded-lg focus:ring-primary11"
-          >
-            <option value="">-- Select Option --</option>
-            <option value="HR">HR</option>
-            <option value="Engineering">Engineering</option>
-            <option value="Marketing">Marketing</option>
-          </select>
+            className="rounded-lg focus:ring-primary11 bg-primary6"
+            readOnly
+          />
         </div>
 
         <div className="flex flex-col space-y-1">
           <label>Leave Type</label>
           <select
             name="type"
+            value={formData.type}
             onChange={handleChange}
             className="rounded-lg focus:ring-primary11"
           >
-            <option value="">-- Select Option --</option>
-            <option value="Sick Leave">Sick Leave</option>
-            <option value="Casual Leave">Casual Leave</option>
+            <option value="">--Select Option--</option>
+            <option value="casual leave">Casual Leave</option>
+            <option value="sick leave">Sick Leave</option>
           </select>
         </div>
+
+        {formData.type === "sick leave" && (
+          <div className="flex flex-col space-y-1">
+            <label className="block text-sm font-medium text-gray-700">
+              Sick Leave Image upload(Medical report)
+            </label>
+            <div className="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-md">
+              <div className="space-y-1 text-center">
+                <svg
+                  className="mx-auto h-12 w-12 text-gray-400"
+                  stroke="currentColor"
+                  fill="none"
+                  viewBox="0 0 48 48"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 40m0-32h.001v.001H28V8zm4 4h.001v.001H32V12zm4 4h.001v.001H36V16z"
+                    strokeWidth={2}
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+                <div className="flex justify-center text-sm text-gray-600">
+                  <label
+                    htmlFor="sickNote"
+                    className="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
+                  >
+                    <span className="text-center">Upload an Image</span>
+                    <input
+                      id="sickNote"
+                      name="sickNote"
+                      type="file"
+                      accept="image/*"
+                      className="sr-only"
+                      onChange={(e) => {
+                        const file = e.target.files[0];
+                        if (file && file.size > 3 * 1024 * 1024) {
+                          showToast("Image size must be less than 3MB");
+                          setSickNoteImage(null);
+                          setSickNotePreview(null);
+                          e.target.value = "";
+                        } else {
+                          setSickNoteImage(file);
+                          setSickNotePreview(URL.createObjectURL(file));
+                        }
+                      }}
+                    />
+                  </label>
+                </div>
+                <p className="text-xs text-gray-500">PNG, JPG up to 3MB</p>
+              </div>
+            </div>
+            {sickNoteImage && (
+              <div className="mt-4">
+                <TextSpan weight="font-semibold">Selected File:</TextSpan>{" "}
+                <TextSpan>{sickNoteImage.name}</TextSpan>
+                {/* Preview */}
+                {sickNotePreview && (
+                  <div className="mt-2">
+                    <img
+                      src={sickNotePreview}
+                      alt="Preview"
+                      className="max-w-xs rounded shadow-md border"
+                    />
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         <div className="flex flex-col space-y-1">
           <label>Leave From</label>
           <input
             type="date"
             name="from"
+            value={formData.from}
             onChange={handleChange}
             className="rounded-lg focus:ring-primary11"
           />
@@ -133,6 +270,7 @@ const RequestForm = () => {
           <input
             type="date"
             name="to"
+            value={formData.to}
             onChange={handleChange}
             className="rounded-lg focus:ring-primary11"
           />
@@ -142,6 +280,7 @@ const RequestForm = () => {
           <label>Reporting Staff</label>
           <select
             name="reportingStaff"
+            value={formData.reportingStaff}
             onChange={handleChange}
             className="rounded-lg focus:ring-primary11"
           >
@@ -163,6 +302,7 @@ const RequestForm = () => {
           <textarea
             name="reason"
             placeholder="Briefly describe..."
+            value={formData.reason}
             onChange={handleChange}
             className="rounded-lg focus:ring-primary11 h-24"
           ></textarea>
@@ -183,7 +323,14 @@ const RequestForm = () => {
             type="submit"
             className="py-3.5 px-6"
           >
-            Apply
+            {isLoading ? (
+              <div className="flex items-center space-x-2">
+                <FaSpinner className="animate-spin text-white text-lg" />
+                <span>Applying...</span>
+              </div>
+            ) : (
+              "Apply"
+            )}
           </ButtonSmallPurple>
         </div>
       </form>

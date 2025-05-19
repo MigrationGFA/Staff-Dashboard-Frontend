@@ -4,6 +4,7 @@ import { ButtonSmallPurple, ButtonSmallWhite } from "../Buttons";
 import api from "../../api/dashboardApi";
 import { showToast } from "../ShowToast";
 import { useSelector } from "react-redux";
+import { FaSpinner } from "react-icons/fa";
 
 const AnonymousMessageForm = () => {
   const navigate = useNavigate();
@@ -11,9 +12,9 @@ const AnonymousMessageForm = () => {
     reason: "",
     message: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
-  const user = useSelector((state) => state.auth.user);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -21,6 +22,7 @@ const AnonymousMessageForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await api.submitAnonymousMessage({
         accessToken,
@@ -28,13 +30,13 @@ const AnonymousMessageForm = () => {
         formData,
       });
       showToast(response.message);
-      setFormData({
-        reason: "",
-        message: "",
-      });
+      setFormData({ reason: "", message: "" });
       navigate(-1);
     } catch (error) {
       console.error("Error submitting anonymous message:", error);
+      showToast("Failed to submit message. Please try again.", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -48,6 +50,7 @@ const AnonymousMessageForm = () => {
           value={formData.reason}
           onChange={handleChange}
           className="w-full rounded-lg focus:ring-primary11"
+          disabled={loading}
         >
           <option value="">-- Select Option --</option>
           <option value="Dispute">Dispute</option>
@@ -65,6 +68,7 @@ const AnonymousMessageForm = () => {
           onChange={handleChange}
           className="w-full rounded-lg focus:ring-primary11 h-36"
           placeholder="Briefly describe..."
+          disabled={loading}
         ></textarea>
       </div>
 
@@ -76,6 +80,7 @@ const AnonymousMessageForm = () => {
           type="button"
           className="py-3.5 px-6 rounded-lg"
           onClick={() => navigate(-1)}
+          disabled={loading}
         >
           Return
         </ButtonSmallWhite>
@@ -83,9 +88,19 @@ const AnonymousMessageForm = () => {
           padding=""
           width=""
           type="submit"
-          className="py-3.5 px-6 rounded-lg"
+          className={`py-3.5 px-6 rounded-lg ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={loading}
         >
-          Submit
+          {loading ? (
+            <div className="flex items-center justify-center space-x-2">
+              <FaSpinner className="animate-spin text-white text-lg" />
+              <span>Submitting...</span>
+            </div>
+          ) : (
+            "Submit"
+          )}
         </ButtonSmallPurple>
       </div>
     </form>

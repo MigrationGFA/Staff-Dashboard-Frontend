@@ -2,7 +2,7 @@ import { IoClose } from "react-icons/io5";
 import { ButtonSmallPurple } from "../Buttons";
 import { useNavigate } from "react-router-dom";
 
-const ViewAnonymousModal = ({ isOpen, onClose }) => {
+const ViewAnonymousModal = ({ isOpen, onClose, message }) => {
   if (!isOpen) return null;
 
   const navigate = useNavigate();
@@ -27,8 +27,10 @@ const ViewAnonymousModal = ({ isOpen, onClose }) => {
             </label>
             <textarea
               className="w-full rounded-lg focus:border-none focus:ring-primary11 h-16"
-              placeholder="Briefly describe..."
-            ></textarea>
+              placeholder="Anonymous details..."
+              readOnly
+              value={message?.suggestion || ""}
+            />
           </div>
 
           {/* Hr Response Field */}
@@ -38,8 +40,10 @@ const ViewAnonymousModal = ({ isOpen, onClose }) => {
             </label>
             <textarea
               className="w-full rounded-lg focus:border-none focus:ring-primary11 h-16"
-              placeholder="Briefly describe..."
-            ></textarea>
+              placeholder="No response yet"
+              readOnly
+              value={message?.responseMessage || ""}
+            />
           </div>
 
           {/* Buttons */}

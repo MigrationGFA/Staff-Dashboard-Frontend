@@ -50,18 +50,14 @@ const checkIn = async ({ accessToken, refreshToken, email, code }) => {
   }
 };
 
-const requestForm = async ({ accessToken, refreshToken, userId, formData }) => {
+const requestForm = async ({ accessToken, refreshToken, formData }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
   try {
-    const response = await authFetch.post(`${PLAIN_API_URL}/leave-request`, {
-      userId,
-      type: formData.type,
-      from: formData.from,
-      to: formData.to,
-      shortDescription: formData.reason,
-      reportingOfficerId: formData.reportingStaff,
-    });
+    const response = await authFetch.post(
+      `${PLAIN_API_URL}/leave-request`,
+      formData
+    );
 
     return response.data;
   } catch (error) {
@@ -88,16 +84,20 @@ const profileForm = async ({
         phone: formData.phoneNumber,
         address: formData.homeAddress,
         nextOfKinName: formData.nextOfKin,
-        medicalDescription: formData.medicalStatus,
+        medicalStatus: formData.medicalStatus,
+        medicalDescription: formData.medicalDescription,
         maritalStatus: formData.maritalStatus,
         nextOfKinContact: formData.nextOfKinContact,
+        nextOfKinAddress: formData.nextOfKinAddress,
         image: profileImage,
       }
     );
 
     return response.data;
   } catch (error) {
-    throw new Error(error.response?.data?.message || "Unable to check-In");
+    throw new Error(
+      error.response?.data?.message || "Unable to save. Try again later."
+    );
   }
 };
 const getreportingStaff = async ({ accessToken, refreshToken, email }) => {
@@ -153,6 +153,22 @@ const getTotalProject = async ({ accessToken, refreshToken, userId }) => {
 
   try {
     const response = await authFetch.get(`${PLAIN_API_URL}/tasks/${userId}`);
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to get all project"
+    );
+  }
+};
+
+const getLeaveSummary = async ({ accessToken, refreshToken, userId }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(
+      `${PLAIN_API_URL}/leave/summary/${userId}`
+    );
 
     return response.data;
   } catch (error) {
@@ -257,7 +273,7 @@ const submitAnonymousMessage = async ({
       {
         department: "Dimp",
         suggestion: formData.message,
-        additionaldetails: formData.reason,
+        reason: formData.reason,
       }
     );
 
@@ -311,6 +327,20 @@ const getSuggestionByDept = async ({
   }
 };
 
+const getHelpData = async ({ accessToken, refreshToken, userId }) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.get(
+      `${PLAIN_API_URL}/getTicketsByUser/${userId}`
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(error.response?.data?.message || "Unable to check-In");
+  }
+};
+
 export default {
   allUserInformation,
   checkIn,
@@ -329,4 +359,6 @@ export default {
   profileForm,
   getStaffDetails,
   onboarding,
+  getLeaveSummary,
+  getHelpData,
 };

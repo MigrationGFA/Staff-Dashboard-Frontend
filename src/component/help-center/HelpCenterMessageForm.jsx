@@ -13,7 +13,7 @@ const HelpCenterMessageForm = () => {
   });
 
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
-  const user = useSelector((state) => state.auth.user?.profile);
+  const user = useSelector((state) => state.auth?.user);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });

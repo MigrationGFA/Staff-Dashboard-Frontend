@@ -28,24 +28,26 @@ const ViewTaskModal = ({ isOpen, onClose, id }) => {
   }, [accessToken, refreshToken, id]);
 
   const formatDate = (dateString) => {
-    const options = { year: "numeric", month: "long", day: "numeric" };
+    if (!dateString) return "N/A";
+    const options = { year: "numeric", month: "2-digit", day: "2-digit" };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  const formatPriority = (priority) => {
+    if (!priority) return "N/A";
+    return priority.charAt(0).toUpperCase() + priority.slice(1).toLowerCase();
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-lg rounded-lg shadow-lg p-6 relative">
+      <div className="bg-white w-full max-w-md rounded-lg shadow-lg p-6 relative">
         {/* Header */}
-        <div className="flex justify-between items-center border-b pb-3">
-          <div className="flex items-center gap-2 text-purple-600">
-            <MdNoteAdd size={30} />
-            <div>
-              <h2 className="text-lg font-semibold">Task</h2>
-              <p className="text-xs text-gray-500">Manage all tasks</p>
-            </div>
-          </div>
+        <div className="flex justify-between items-center border-b space-x-2 pb-3 mb-4">
+          <h2 className="text-lg font-semibold text-gray-800">
+            My Task Details
+          </h2>
           <button
             onClick={onClose}
             className="text-gray-500 hover:text-gray-700"
@@ -55,48 +57,65 @@ const ViewTaskModal = ({ isOpen, onClose, id }) => {
         </div>
 
         {/* Task Details */}
-        <div className="mt-4 space-y-3 text-sm text-gray-700">
-          <p>
-            <span className="font-semibold">Task Name:</span>{" "}
-            <span className="ml-2">{viewDetails?.name}</span>
-          </p>
-          <p>
-            <span className="font-semibold">Assigned By:</span>{" "}
-            <span className="ml-2">{viewDetails?.assignedBy}</span>
-          </p>
-          <p>
-            <span className="font-semibold">Duration:</span>{" "}
-            <span className="ml-2 font-medium text-purple-600">
-              {viewDetails?.duration}
-            </span>
-          </p>
-          <p>
-            <span className="font-semibold">Start Date:</span>{" "}
-            <span className="ml-2">
-              {formatDate(viewDetails?.startingDate)}
-            </span>
-          </p>
-          <p>
-            <span className="font-semibold">End Date:</span>{" "}
-            <span className="ml-2">{formatDate(viewDetails?.endDate)}</span>
-          </p>
-          {/* <p>
-            <span className="font-semibold">Date of Resumption:</span>{" "}
-            <span className="ml-2">01/01/2025</span>
-          </p> */}
+        <div className="grid grid-cols-2 gap-3 text-sm text-gray-700">
+          <div className="border-b flex items-center space-x-2 py-2">
+            <span className="font-semibold">Task Name:</span>
+            <div className="mt-1">{viewDetails?.name || "N/A"}</div>
+          </div>
+          <div className="border-b flex items-center space-x-2 py-2">
+            <span className="font-semibold">Assigned By:</span>
+            <div className="mt-1">{viewDetails?.assignedBy || "N/A"}</div>
+          </div>
+          <div className="border-b flex items-center space-x-2 py-2">
+            <span className="font-semibold">Duration:</span>
+            <div className="mt-1">
+              {formatPriority(viewDetails?.duration) || "N/A"}
+            </div>
+          </div>
+          <div className="border-b flex items-center space-x-2 py-2">
+            <span className="font-semibold">Start Date:</span>
+            <div className="mt-1">{formatDate(viewDetails?.startingDate)}</div>
+          </div>
+          <div className="border-b flex items-center space-x-2 py-2">
+            <span className="font-semibold">End Date:</span>
+            <div className="mt-1">{formatDate(viewDetails?.endDate)}</div>
+          </div>
 
           {/* Description */}
-          <div className="mt-3">
-            <label className="block text-gray-600 text-sm font-semibold">
+          <div className="col-span-2 mt-4 border-b py-2">
+            <label className="block text-gray-600 text-sm font-semibold mb-1">
               Description
             </label>
             <textarea
               className="w-full h-20 p-2 border border-gray-300 rounded-lg text-gray-500 bg-gray-50 cursor-not-allowed"
               placeholder="Briefly describe..."
-              value={viewDetails?.shortDescription}
+              value={viewDetails?.shortDescription || ""}
               disabled
             />
           </div>
+
+          {/* Feedback */}
+          <div className="col-span-2 mt-4 border-b py-2">
+            <label className="block text-gray-600 text-sm font-semibold mb-1">
+              Feedback
+            </label>
+            <textarea
+              className="w-full h-20 p-2 border border-gray-300 rounded-lg text-gray-500 bg-gray-50"
+              placeholder="Type here..."
+              // value={feedback}
+              // onChange={(e) => setFeedback(e.target.value)}
+            />
+          </div>
+        </div>
+
+        {/* Buttons */}
+        <div className="mt-6 flex justify-start gap-2">
+          <button className="bg-purple-100 text-purple-700 font-semibold rounded-full px-4 py-2 text-sm hover:bg-purple-200 focus:outline-none">
+            In Progress
+          </button>
+          <button className="bg-purple-600 text-white font-semibold rounded-full px-4 py-2 text-sm hover:bg-purple-700 focus:outline-none">
+            Completed
+          </button>
         </div>
       </div>
     </div>
