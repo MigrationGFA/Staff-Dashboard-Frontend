@@ -6,13 +6,15 @@ import ViewTaskModal from "../modals/ViewTaskModal";
 import { useSelector } from "react-redux";
 import api from "../../api/dashboardApi";
 
-const TaskTable = () => {
+const TaskTable = ({ onTaskAdded }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState(null);
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const user = useSelector((state) => state.auth.user);
   const [tasks, setTasks] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const tasksPerPage = 5;
 
   const fetchTasks = async () => {
     try {
@@ -36,6 +38,7 @@ const TaskTable = () => {
       );
 
       setTasks(tasksFromResponse);
+      setCurrentPage(1);
     } catch (error) {
       console.log(error);
     }
@@ -44,6 +47,12 @@ const TaskTable = () => {
   useEffect(() => {
     fetchTasks();
   }, [accessToken, refreshToken]);
+
+  const indexOfLastTask = currentPage * tasksPerPage;
+  const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+  const currentTasks = tasks.slice(indexOfFirstTask, indexOfLastTask);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <div className="p-5 bg-white rounded-lg shadow-lg mb-4">
@@ -83,7 +92,7 @@ const TaskTable = () => {
             </tr>
           </thead>
           <tbody>
-            {tasks.map((task) => (
+            {currentTasks.map((task) => (
               <tr key={task.id} className="border-t text-gray-700">
                 <td className="p-3">{task.name}</td>
                 <td className="p-3">{task.assignedBy}</td>
@@ -120,15 +129,58 @@ const TaskTable = () => {
         </table>
       </div>
 
-      <AddTaskModal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
-      <ViewTaskModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        id={selectedTaskId}
-      />
+      <div className="flex justify-between items-center mt-4">
+        <div>
+          Page {currentPage} of {Math.ceil(tasks.length / tasksPerPage)}
+        </div>
+
+        <div className="space-x-2">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === 1 ? "bg-gray-300" : "bg-primary11 text-white"
+            }`}
+          >
+            Previous
+          </button>
+
+          <button
+            onClick={() =>
+              setCurrentPage((prev) =>
+                Math.min(prev + 1, Math.ceil(tasks.length / tasksPerPage))
+              )
+            }
+            disabled={currentPage === Math.ceil(tasks.length / tasksPerPage)}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === Math.ceil(tasks.length / tasksPerPage)
+                ? "bg-gray-300"
+                : "bg-primary11 text-white"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+
+      {isModalOpen && (
+        <AddTaskModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onTaskAdded={() => {
+            fetchTasks();
+            onTaskAdded?.();
+            setIsModalOpen(false);
+          }}
+        />
+      )}
+      {isEditModalOpen && (
+        <ViewTaskModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          id={selectedTaskId}
+        />
+      )}
     </div>
   );
 };

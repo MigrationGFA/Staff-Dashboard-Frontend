@@ -3,10 +3,12 @@ import { ButtonSmallPurple } from "../Buttons";
 import { useSelector } from "react-redux";
 import api from "../../api/dashboardApi";
 import { showToast } from "../ShowToast";
+import { FaSpinner } from "react-icons/fa";
 
 const ProfileForm = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const user = useSelector((state) => state.auth.user);
+  const [loading, setLoading] = useState(false);
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -17,7 +19,7 @@ const ProfileForm = () => {
   };
 
   const [profileImage, setProfileImage] = useState(
-    user?.profile?.imageUrl || null
+    user?.imageUrl || user?.profile?.imageUrl || null
   );
   const [formData, setFormData] = useState({
     fullName: user?.fullName || user?.profile?.fullName || "",
@@ -98,6 +100,7 @@ const ProfileForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       const response = await api.profileForm({
         accessToken,
@@ -109,12 +112,15 @@ const ProfileForm = () => {
 
       showToast(response.message);
     } catch (error) {
+      showToast(error.message);
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="p-8 my-6 flex flex-col lg:flex-row items-center justify-around">
+    <div className="p-8 my-2 flex flex-col lg:flex-row items-center justify-around">
       {/* Profile Image */}
       <div className="lg:w-2/5 flex flex-col items-center lg:mb-14">
         <div className="w-36 h-36 bg-gray-300 rounded-full flex items-center justify-center border border-sec11">
@@ -141,10 +147,10 @@ const ProfileForm = () => {
 
       {/* Form */}
       <form
-        className="w-full lg:w-3/5 grid grid-cols-1 lg:grid-cols-2 gap-4 mt-6"
+        className="w-full lg:w-3/5 grid grid-cols-1 lg:grid-cols-2 gap-3 lg:gap-4 mt-6"
         onSubmit={handleSubmit}
       >
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Full Name</label>
           <input
             type="text"
@@ -156,7 +162,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600 ">Email Address</label>
           <input
             type="email"
@@ -169,7 +175,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Date of Birth</label>
           <input
             type="date"
@@ -180,7 +186,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Department</label>
           <input
             type="text"
@@ -192,7 +198,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Role</label>
           <input
             type="text"
@@ -205,7 +211,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Contract Type</label>
           <input
             type="text"
@@ -217,7 +223,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Phone Number</label>
           <input
             type="text"
@@ -229,7 +235,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Home Address</label>
           <input
             type="text"
@@ -241,7 +247,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Marital Status</label>
           <select
             name="maritalStatus"
@@ -256,7 +262,7 @@ const ProfileForm = () => {
           </select>
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Next Of Kin</label>
           <input
             type="text"
@@ -268,7 +274,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Next Of Kin Address</label>
           <input
             type="text"
@@ -280,7 +286,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Next Of Kin Contact</label>
           <input
             type="text"
@@ -292,7 +298,7 @@ const ProfileForm = () => {
           />
         </div>
 
-        <div>
+        <div className="col-span-2 lg:col-span-1">
           <label className="block text-gray-600">Medical Status</label>
           <input
             type="text"
@@ -305,17 +311,25 @@ const ProfileForm = () => {
         </div>
 
         {/* Save Button */}
-        <div className="flex items-center justify-end mt-6">
-          <ButtonSmallPurple
-            padding=""
-            height=""
-            width=""
-            className="px-8 py-2 rounded-lg transition"
-            type="submit"
-          >
-            Save
-          </ButtonSmallPurple>
-        </div>
+        <ButtonSmallPurple
+          padding=""
+          height=""
+          width=""
+          className={`col-span-2 px-8 py-2 rounded-lg transition ${
+            loading ? "opacity-70 cursor-not-allowed" : ""
+          }`}
+          type="submit"
+          disabled={loading}
+        >
+          {loading ? (
+            <div className="flex items-center justify-center space-x-2">
+              <FaSpinner className="animate-spin text-white text-lg" />
+              <span>Saving...</span>
+            </div>
+          ) : (
+            "Save"
+          )}
+        </ButtonSmallPurple>
       </form>
     </div>
   );

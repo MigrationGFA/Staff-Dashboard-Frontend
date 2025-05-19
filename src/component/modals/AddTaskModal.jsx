@@ -4,12 +4,16 @@ import { ButtonSmallPurple, ButtonSmallWhite } from "../Buttons";
 import api from "../../api/dashboardApi";
 import { useSelector } from "react-redux";
 import { showToast } from "../ShowToast";
+import { FaSpinner } from "react-icons/fa";
 
-const AddTaskModal = ({ isOpen, onClose }) => {
+const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const user = useSelector((state) => state.auth.user);
   const [assignedTo, setAssignedTo] = useState([]);
   const [assignedBy, setAssignedBy] = useState([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   const [formData, setFormData] = useState({
     taskName: "",
     assignedBy: "",
@@ -58,6 +62,8 @@ const AddTaskModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
+
     try {
       const response = await api.addTask({
         accessToken,
@@ -66,9 +72,12 @@ const AddTaskModal = ({ isOpen, onClose }) => {
         formData,
       });
       showToast(response?.message);
-      // onClose();
+      onTaskAdded();
+      onClose();
     } catch (error) {
       console.error("Error submitting task:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -99,6 +108,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 className="w-full rounded-lg focus:border-primary11"
                 placeholder="Task name"
+                required
               />
             </div>
 
@@ -109,6 +119,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
                 value={formData.assignedBy}
                 onChange={handleChange}
                 className="w-full rounded-lg focus:border-primary11"
+                required
               >
                 <option value="">-- Select Option --</option>
                 {assignedBy?.map((option) => (
@@ -128,6 +139,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
                 value={formData.assignedTo}
                 onChange={handleChange}
                 className="w-full rounded-lg focus:border-primary11"
+                required
               >
                 <option value="">-- Select Option --</option>
                 {assignedTo?.map((option) => (
@@ -150,6 +162,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 className="w-full rounded-lg focus:border-primary11"
                 placeholder="Duration"
+                required
               />
             </div>
 
@@ -161,6 +174,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
                 value={formData.startDate}
                 onChange={handleChange}
                 className="w-full rounded-lg focus:border-primary11"
+                required
               />
             </div>
 
@@ -172,6 +186,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
                 value={formData.endDate}
                 onChange={handleChange}
                 className="w-full rounded-lg focus:border-primary11"
+                required
               />
             </div>
 
@@ -183,6 +198,7 @@ const AddTaskModal = ({ isOpen, onClose }) => {
                 onChange={handleChange}
                 className="w-full rounded-lg focus:border-primary11 h-24"
                 placeholder="Reason for the task"
+                required
               ></textarea>
             </div>
           </div>
@@ -202,9 +218,19 @@ const AddTaskModal = ({ isOpen, onClose }) => {
               padding=""
               height=""
               type="submit"
-              className="px-4 py-2 rounded-lg transition h-auto"
+              className={`px-4 py-2 rounded-lg transition h-auto ${
+                isLoading ? "opacity-50 cursor-not-allowed" : ""
+              }`}
+              disabled={isLoading}
             >
-              Save
+              {isLoading ? (
+                <div className="flex items-center space-x-2">
+                  <FaSpinner className="animate-spin text-white text-lg" />
+                  <span>Adding...</span>
+                </div>
+              ) : (
+                "Add"
+              )}
             </ButtonSmallPurple>
           </div>
         </form>

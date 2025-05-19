@@ -5,10 +5,15 @@ import { useNavigate } from "react-router-dom";
 import ViewAnonymousModal from "../modals/ViewAnonymousModal";
 import api from "../../api/dashboardApi";
 import { useSelector } from "react-redux";
+import { formatDate } from "../../utils/dateHelper";
 
-const AnonymousTable = () => {
+const AnonymousTable = ({ onAdded }) => {
   const [isAnonymousModalOpen, setIsAnonymousModalOpen] = useState(false);
+  const [selectedMessage, setSelectedMessage] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
+
   const navigate = useNavigate();
 
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
@@ -23,6 +28,7 @@ const AnonymousTable = () => {
           department: user.department,
         });
         setMessages(response.suggestions);
+        setCurrentPage(1);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
@@ -30,6 +36,11 @@ const AnonymousTable = () => {
 
     fetchMessages();
   }, []);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentMessages = messages.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(messages.length / itemsPerPage);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -55,7 +66,10 @@ const AnonymousTable = () => {
           width=""
           height=""
           className="flex items-center text-white px-4 py-2.5 rounded-lg transition"
-          onClick={() => navigate("/anonymous-form")}
+          onClick={() => {
+            navigate("/anonymous-form");
+            onAdded?.();
+          }}
         >
           <FaPlus className="mr-2" /> Add Message
         </ButtonSmallPurple>
@@ -90,11 +104,11 @@ const AnonymousTable = () => {
             </tr>
           </thead>
           <tbody>
-            {messages?.map((task) => (
-              <tr key={task.id} className="border-t text-sec11">
-                <td className="p-3">{task.name}</td>
-                <td className="p-3">{task.assigned}</td>
-                <td className="p-3">{task.date}</td>
+            {currentMessages?.map((message) => (
+              <tr key={message._id} className="border-t text-sec11">
+                <td className="p-3">{message.reason}</td>
+                <td className="p-3">{message.department}</td>
+                <td className="p-3">{formatDate(message.createdAt)}</td>
 
                 <td className="p-3 space-y-2 lg:space-y-0 lg:space-x-2">
                   <ButtonSmallWhite
@@ -102,7 +116,10 @@ const AnonymousTable = () => {
                     width=""
                     height=""
                     className="px-7 lg:px-4 py-1 rounded-lg h-auto"
-                    onClick={() => setIsAnonymousModalOpen(true)}
+                    onClick={() => {
+                      setSelectedMessage(message);
+                      setIsAnonymousModalOpen(true);
+                    }}
                   >
                     View
                   </ButtonSmallWhite>
@@ -113,10 +130,46 @@ const AnonymousTable = () => {
         </table>
       </div>
 
+      <div className="flex justify-between items-center mt-4">
+        <div>
+          Page {currentPage} of {totalPages}
+        </div>
+
+        <div className="space-x-2 cursor-pointer">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === 1 ? "bg-gray-300" : "bg-primary11 text-white"
+            }`}
+          >
+            Previous
+          </button>
+
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === totalPages
+                ? "bg-gray-300"
+                : "bg-primary11 text-white"
+            }`}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+
       {/* View Anonymous Modal */}
       <ViewAnonymousModal
         isOpen={isAnonymousModalOpen}
-        onClose={() => setIsAnonymousModalOpen(false)}
+        onClose={() => {
+          setIsAnonymousModalOpen(false);
+          setSelectedMessage(null);
+        }}
+        message={selectedMessage}
       />
     </div>
   );

@@ -12,6 +12,8 @@ import { useEffect, useState } from "react";
 import { completeOnboarding } from "../../features/authentication";
 
 const Onboarding = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
@@ -45,6 +47,7 @@ const Onboarding = () => {
   // }, [accessToken, refreshToken]);
 
   const onSubmit = async (data) => {
+    setIsSubmitting(true);
     try {
       const payload = {
         // userId: user.userId,
@@ -68,6 +71,8 @@ const Onboarding = () => {
     } catch (error) {
       console.error("Onboarding failed:", error);
       showToast("Failed to submit profile. Try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -195,7 +200,7 @@ const Onboarding = () => {
                     return;
                   }
                   const imagePreviewUrl = URL.createObjectURL(file);
-                  setValue("imageUrl", imagePreviewUrl);
+                  setValue("image", imagePreviewUrl);
                 }
               }}
               className="block w-full text-sm text-gray-700 border rounded-lg"
@@ -281,8 +286,12 @@ const Onboarding = () => {
             />
           </div>
           <div className="col-span-1 lg:col-span-2 my-3">
-            <ButtonLongPurple type="submit" className="w-full">
-              Submit Onboarding
+            <ButtonLongPurple
+              type="submit"
+              className="w-full"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit Onboarding"}
             </ButtonLongPurple>
           </div>
         </form>

@@ -12,6 +12,8 @@ const StaffTable = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [staff, setStaff] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(5);
 
   const fetchStaffData = async () => {
     try {
@@ -21,7 +23,7 @@ const StaffTable = () => {
         department: user?.department,
       });
       setStaff(response?.data);
-      console.log(response.data);
+      setCurrentPage(1);
     } catch (error) {
       console.log(error);
     }
@@ -30,6 +32,11 @@ const StaffTable = () => {
   useEffect(() => {
     fetchStaffData();
   }, [accessToken, refreshToken]);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentStaff = staff.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(staff.length / itemsPerPage);
 
   const getStatusClass = (status) => {
     switch (status) {
@@ -55,7 +62,7 @@ const StaffTable = () => {
             placeholder="Search"
             className="rounded-lg focus:ring-primary11"
           />
-          <ButtonSmallPurple
+          {/* <ButtonSmallPurple
             padding=""
             width=""
             height=""
@@ -63,7 +70,7 @@ const StaffTable = () => {
             onClick={() => setIsModalOpen(true)}
           >
             <FaPlus className="mr-2" /> Add Staff
-          </ButtonSmallPurple>
+          </ButtonSmallPurple> */}
         </div>
       </div>
       {/* Table */}
@@ -80,7 +87,7 @@ const StaffTable = () => {
           </thead>
           <tbody>
             {staff.length > 0 &&
-              staff?.map((staff) => (
+              currentStaff?.map((staff) => (
                 <tr key={staff.id} className="border-t text-sec11">
                   <td className="p-3">{staff.profile?.fullName}</td>
                   <td className="p-3">{staff.role}</td>
@@ -99,6 +106,38 @@ const StaffTable = () => {
               ))}
           </tbody>
         </table>
+      </div>
+
+      <div className="flex justify-between items-center mt-4">
+        <div>
+          Page {currentPage} of {totalPages}
+        </div>
+
+        <div className="space-x-2 cursor-pointer">
+          <button
+            onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+            disabled={currentPage === 1}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === 1 ? "bg-gray-300" : "bg-primary11 text-white"
+            }`}
+          >
+            Previous
+          </button>
+
+          <button
+            onClick={() =>
+              setCurrentPage((prev) => Math.min(prev + 1, totalPages))
+            }
+            disabled={currentPage === totalPages}
+            className={`px-4 py-2 rounded-lg ${
+              currentPage === totalPages
+                ? "bg-gray-300"
+                : "bg-primary11 text-white"
+            }`}
+          >
+            Next
+          </button>
+        </div>
       </div>
 
       {/* Add Staff Modal */}

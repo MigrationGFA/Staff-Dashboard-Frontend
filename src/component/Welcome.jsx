@@ -10,12 +10,10 @@ const Welcome = ({ header, message }) => {
       color=""
       className="flex items-center justify-center lg:justify-start whitespace-nowrap"
     >
-      Hi{" "}
+      Welcome Back{" "}
       <div className="font-semibold ms-1">
         {onboardedUser?.fullName || user?.fullName}
-      </div>
-      , welcome back to your Dashboard
-      {/* to Dimp {userRole || "Admin"}! */}
+      </div>!
     </TextSpan>
   ) : (
     `Hi User, welcome back to Dimp ${userRole || "Staff"}!`
@@ -24,7 +22,7 @@ const Welcome = ({ header, message }) => {
     <div className="w-full flex flex-col py-4 lg:py-10">
       <Heading
         level={1}
-        className="text-center lg:text-left text-xl md:text-3xl text-primary3"
+        className="text-center lg:text-left text-xl md:text-3xl"
         size=""
         color=""
         weight="font-semibold"

@@ -3,20 +3,20 @@ import { TextSpan } from "../Text";
 import { useEffect, useState } from "react";
 import api from "../../api/dashboardApi";
 
-const OverviewStats = () => {
+const LeaveStats = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const user = useSelector((state) => state.auth.user);
-  const [totalProject, settotalProject] = useState([]);
+  const [totalLeave, settotalLeave] = useState([]);
 
-  const fetchTotalProject = async () => {
+  const fetchTotalLeave = async () => {
     try {
-      const response = await api.getTotalProject({
+      const response = await api.getLeaveSummary({
         accessToken,
         refreshToken,
         userId: user.userId,
       });
 
-      settotalProject(response.result);
+      settotalLeave(response?.data);
       console.log(response);
     } catch (error) {
       console.log(error);
@@ -24,37 +24,37 @@ const OverviewStats = () => {
   };
 
   useEffect(() => {
-    fetchTotalProject();
+    fetchTotalLeave();
   }, [accessToken, refreshToken]);
 
   return (
     <div className="pb-6 grid grid-cols-1 lg:grid-cols-3 gap-4 justify-between text-white">
-      <div className="flex flex-col justify-center shadow-xl rounded-lg p-4 bg-gradient-to-tr from-ter6 to-sec11 space-y-4 hover:scale-105 transition duration-300">
+      <div className="flex flex-col justify-center shadow-xl rounded-lg p-4 bg-gradient-to-tr from-[#935092] to-sec11 space-y-4 hover:scale-105 transition duration-300">
         <TextSpan size="" color="" className="text-xl text-white">
-          Total Attendance (Weekly)
+          Total Leave Days
         </TextSpan>
         <TextSpan size="" color="" className="text-3xl">
-          {totalProject?.totalAttendance || 0}
+          {totalLeave?.totalLeaveDays || 0}
         </TextSpan>
       </div>
-      <div className="flex flex-col shadow-xl rounded-lg p-4 bg-gradient-to-tr from-sec10 to-sec11 space-y-4 hover:scale-105 transition duration-300">
+      <div className="flex flex-col shadow-xl rounded-lg p-4 bg-gradient-to-tr from-[#238926] to-sec11 space-y-4 hover:scale-105 transition duration-300">
         <TextSpan size="" color="" className="text-xl">
-          Weekly KPI
+          Requested Leave Days
         </TextSpan>
         <TextSpan size="" color="" className="text-3xl">
-          0%
+          {totalLeave?.requestedLeaveCount || 0}
         </TextSpan>
       </div>
-      <div className="flex flex-col shadow-xl rounded-lg p-4 bg-gradient-to-tr from-grad12 to-sec11 space-y-4 hover:scale-105 transition duration-300">
+      <div className="flex flex-col shadow-xl rounded-lg p-4 bg-gradient-to-tr  from-[#CF8611] to-sec11 space-y-4 hover:scale-105 transition duration-300">
         <TextSpan size="" color="" className="text-xl">
-          Total Projects(Weekly)
+          Pending Leave Days
         </TextSpan>
         <TextSpan size="" color="" className="text-3xl">
-          {totalProject?.totalTask || 0}
+          {totalLeave?.pendingLeaveCount || 0}
         </TextSpan>
       </div>
     </div>
   );
 };
 
-export default OverviewStats;
+export default LeaveStats;
