@@ -18,7 +18,7 @@ const Onboarding = () => {
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
 
-  const user = useSelector((state) => state?.profile?.profile);
+  const user = useSelector((state) => state?.auth?.user);
 
   const [reportingStaff, setReportingStaff] = useState([]);
 
