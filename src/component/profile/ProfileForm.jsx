@@ -1,14 +1,18 @@
 import { useState, useEffect } from "react";
 import { ButtonSmallPurple } from "../Buttons";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import api from "../../api/dashboardApi";
 import { showToast } from "../ShowToast";
 import { FaSpinner } from "react-icons/fa";
+import { setProfile, updateProfile } from "../../features/profile";
 
 const ProfileForm = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const user = useSelector((state) => state.auth.user);
+  const userProfile = useSelector((state) => state?.profile?.profile);
   const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -19,53 +23,95 @@ const ProfileForm = () => {
   };
 
   const [profileImage, setProfileImage] = useState(
-    user?.imageUrl || user?.profile?.imageUrl || null
+    userProfile?.imageUrl || user?.profile?.imageUrl || null
   );
   const [formData, setFormData] = useState({
-    fullName: user?.fullName || user?.profile?.fullName || "",
-    email: user?.email || "",
-    dateOfBirth: user?.profile?.dob ? formatDate(user.profile.dob) : "",
+    fullName: userProfile?.fullName || user?.profile?.fullName || "",
+    email: userProfile?.email || "",
+    dob: userProfile?.profile?.dob ? formatDate(user.profile.dob) : "",
     department: user?.department || "",
     role: user?.role || "",
     contractType: user?.contractType || "",
-    phoneNumber: user?.phone || user?.phoneNumber || "",
-    homeAddress: user?.address || user?.homeAddress || "",
+    phone: userProfile?.phone || user?.phone || user?.phoneNumber || "",
+    address: userProfile?.address || user?.address || user?.homeAddress || "",
     maritalStatus: user?.maritalStatus?.trim()
       ? user.maritalStatus
       : user?.profile?.maritalStatus || "",
 
-    nextOfKin: user?.nextOfKinName || user?.nextOfKin || "",
-    nextOfKinAddress: user?.nextOfKinAddress || "",
+    nextOfKinName:
+      userProfile?.nextOfKinName ||
+      user?.nextOfKinName ||
+      user?.nextOfKin ||
+      "",
+    nextOfKinAddress:
+      userProfile?.nextOfKinAddress || user?.nextOfKinAddress || "",
     nextOfKinContact:
-      user?.nextOfKinContact || user?.profile?.nextOfKinContact || "",
-    medicalStatus: user?.medicalStatus || user?.profile?.medicalStatus || "",
+      userProfile?.nextOfKinContact ||
+      user?.nextOfKinContact ||
+      user?.profile?.nextOfKinContact ||
+      "",
+    medicalStatus:
+      userProfile?.medicalStatus ||
+      user?.medicalStatus ||
+      user?.profile?.medicalStatus ||
+      "",
+    medicalDescription:
+      userProfile?.medicalDescription ||
+      user?.medicalDescription ||
+      user?.profile?.medicalDescription ||
+      "",
   });
 
   useEffect(() => {
     if (user) {
       setFormData({
-        fullName: user?.fullName || user.profile?.fullName || "",
-        email: user.email || "",
-        dateOfBirth: user?.profile?.dob
-          ? formatDate(user.profile.dob)
-          : user?.dob
-          ? formatDate(user.dob)
-          : "",
+        fullName:
+          userProfile?.fullName ||
+          user?.fullName ||
+          user.profile?.fullName ||
+          "",
+        email: userProfile?.email || user.email || "",
+        dob:
+          userProfile?.dob || user?.profile?.dob
+            ? formatDate(user.profile.dob)
+            : user?.dob
+            ? formatDate(user.dob)
+            : "",
 
         department: user.department || "",
         role: user.role || "",
         contractType: user?.contractType || user.profile?.contractType || "",
-        phoneNumber: user?.phone || user.profile?.phone || "",
-        homeAddress: user?.address || user.profile?.address || "",
+        phone: userProfile?.phone || user?.phone || user.profile?.phone || "",
+        address:
+          userProfile?.address || user?.address || user.profile?.address || "",
         maritalStatus: user?.maritalStatus?.trim()
           ? user.maritalStatus
           : user?.profile?.maritalStatus || "",
-        nextOfKin: user?.nextOfKinName || user.profile?.nextOfKinName || "",
+        nextOfKinName:
+          userProfile?.nextOfKinName ||
+          user?.nextOfKinName ||
+          user.profile?.nextOfKinName ||
+          "",
         nextOfKinAddress:
-          user?.nextOfKinAddress || user.profile?.nextOfKinAddress || "",
+          userProfile?.nextOfKinAddress ||
+          user?.nextOfKinAddress ||
+          user.profile?.nextOfKinAddress ||
+          "",
         nextOfKinContact:
-          user?.nextOfKinContact || user.profile?.nextOfKinContact || "",
-        medicalStatus: user?.medicalStatus || user.profile?.medicalStatus || "",
+          userProfile?.nextOfKinContact ||
+          user?.nextOfKinContact ||
+          user.profile?.nextOfKinContact ||
+          "",
+        medicalStatus:
+          userProfile?.medicalStatus ||
+          user?.medicalStatus ||
+          user.profile?.medicalStatus ||
+          "",
+        medicalDescription:
+          userProfile?.medicalDescription ||
+          user?.medicalDescription ||
+          user?.profile?.medicalDescription ||
+          "",
       });
     }
   }, [user]);
@@ -98,22 +144,55 @@ const ProfileForm = () => {
     setFormData({ ...formData, [name]: value });
   };
 
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   setLoading(true);
+  //   try {
+  //     const response = await api.profileForm({
+  //       accessToken,
+  //       refreshToken,
+  //       formData,
+  //       profileImage,
+  //       userId: user.userId,
+  //     });
+
+  //     showToast(response.message);
+  //   } catch (error) {
+  //     showToast(error.message);
+  //     console.log(error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+
     try {
+      const data = new FormData();
+
+      for (const key in formData) {
+        data.append(key, formData[key]);
+      }
+
+      const fileInput = document.getElementById("profileImageInput");
+      if (fileInput?.files?.[0]) {
+        data.append("image", fileInput.files[0]);
+      }
+
       const response = await api.profileForm({
         accessToken,
         refreshToken,
-        formData,
-        profileImage,
+        formData: data,
         userId: user.userId,
       });
 
+      dispatch(updateProfile(response.data));
       showToast(response.message);
     } catch (error) {
-      showToast(error.message);
-      console.log(error);
+      console.error(error);
+      showToast(error.message || "An error occurred");
     } finally {
       setLoading(false);
     }
@@ -179,8 +258,8 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Date of Birth</label>
           <input
             type="date"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
+            name="dob"
+            value={formData.dob}
             onChange={handleInputChange}
             className="w-full rounded-lg focus:ring-primary11"
           />
@@ -227,8 +306,8 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Phone Number</label>
           <input
             type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
+            name="phone"
+            value={formData.phone}
             onChange={handleInputChange}
             className="w-full rounded-lg focus:ring-primary11"
             placeholder="Phone Number"
@@ -239,8 +318,8 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Home Address</label>
           <input
             type="text"
-            name="homeAddress"
-            value={formData.homeAddress}
+            name="address"
+            value={formData.address}
             onChange={handleInputChange}
             className="w-full rounded-lg focus:ring-primary11"
             placeholder="Home Address"
@@ -256,9 +335,9 @@ const ProfileForm = () => {
             className="w-full rounded-lg focus:ring-primary11"
           >
             <option value="-- Select Option --">-- Select Option --</option>
-            <option value="single">Single</option>
-            <option value="married">Married</option>
-            <option value="divorced">Divorced</option>
+            <option value="Single">Single</option>
+            <option value="Married">Married</option>
+            <option value="Divorced">Divorced</option>
           </select>
         </div>
 
@@ -267,7 +346,7 @@ const ProfileForm = () => {
           <input
             type="text"
             name="nextOfKin"
-            value={formData.nextOfKin}
+            value={formData.nextOfKinName}
             onChange={handleInputChange}
             className="w-full rounded-lg focus:ring-primary11"
             placeholder="Next Of Kin"
@@ -307,6 +386,16 @@ const ProfileForm = () => {
             onChange={handleInputChange}
             className="w-full rounded-lg focus:ring-primary11"
             placeholder="Medical Status"
+          />
+        </div>
+        <div className="col-span-2 lg:col-span-1">
+          <label className="block text-gray-600">Medical Description</label>
+          <input
+            type="text"
+            name="medicalDescription"
+            value={formData.medicalDescription}
+            onChange={handleInputChange}
+            className="w-full rounded-lg focus:ring-primary11"
           />
         </div>
 

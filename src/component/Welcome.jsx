@@ -3,7 +3,7 @@ import { useSelector } from "react-redux"; // Ensure you import useSelector
 
 const Welcome = ({ header, message }) => {
   const user = useSelector((state) => state?.auth?.user.profile);
-  const onboardedUser = useSelector((state) => state?.auth?.user);
+  const userProfile = useSelector((state) => state?.profile?.profile);
   const userRole = useSelector((state) => state?.auth?.user?.role);
   const defaultMessage = user ? (
     <TextSpan
@@ -12,8 +12,9 @@ const Welcome = ({ header, message }) => {
     >
       Welcome Back{" "}
       <div className="font-semibold ms-1">
-        {onboardedUser?.fullName || user?.fullName}
-      </div>!
+        {userProfile?.fullName || user?.fullName}
+      </div>
+      !
     </TextSpan>
   ) : (
     `Hi User, welcome back to Dimp ${userRole || "Staff"}!`

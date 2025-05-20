@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import api from "../api/authRoute";
+import { setProfile } from "./profile";
+import { useDispatch } from "react-redux";
 
 // Initial state for authentication
 const initialState = {
@@ -30,6 +32,8 @@ export const completeOnboarding = createAsyncThunk(
     { accessToken, refreshToken, userId, payload },
     { rejectWithValue }
   ) => {
+    const dispatch = useDispatch();
+
     try {
       const response = await api.onboarding({
         accessToken,
@@ -38,6 +42,7 @@ export const completeOnboarding = createAsyncThunk(
         payload,
       });
       console.log("onboarding response:", response.data);
+      dispatch(setProfile(response.data.user));
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.message || error.message);
@@ -81,7 +86,6 @@ const authSlice = createSlice({
           ...state.user,
           ...action.payload,
         };
-        console.log("After:", state.user);
         state.error = null;
       })
       .addCase(completeOnboarding.rejected, (state, action) => {

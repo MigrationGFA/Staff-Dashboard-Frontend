@@ -65,32 +65,13 @@ const requestForm = async ({ accessToken, refreshToken, formData }) => {
   }
 };
 
-const profileForm = async ({
-  accessToken,
-  refreshToken,
-  userId,
-  formData,
-  profileImage,
-}) => {
+const profileForm = async ({ accessToken, refreshToken, userId, formData }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
   try {
     const response = await authFetch.patch(
       `${PLAIN_API_URL}/update-profile/${userId}`,
-      {
-        fullName: formData.fullName,
-        dob: formData.dateOfBirth,
-        email: formData.email,
-        phone: formData.phoneNumber,
-        address: formData.homeAddress,
-        nextOfKinName: formData.nextOfKin,
-        medicalStatus: formData.medicalStatus,
-        medicalDescription: formData.medicalDescription,
-        maritalStatus: formData.maritalStatus,
-        nextOfKinContact: formData.nextOfKinContact,
-        nextOfKinAddress: formData.nextOfKinAddress,
-        image: profileImage,
-      }
+      formData
     );
 
     return response.data;
@@ -239,6 +220,28 @@ const getStaffDetails = async ({ accessToken, refreshToken, department }) => {
     );
   }
 };
+
+const updateTaskStatus = async ({
+  accessToken,
+  refreshToken,
+  taskId,
+  status,
+}) => {
+  const authFetch = AxiosInterceptor(accessToken, refreshToken);
+
+  try {
+    const response = await authFetch.patch(
+      `${PLAIN_API_URL}/tasks/${taskId}/${status}`
+    );
+
+    return response.data;
+  } catch (error) {
+    throw new Error(
+      error.response?.data?.message || "Unable to update task status"
+    );
+  }
+};
+
 const addTask = async ({ accessToken, refreshToken, userId, formData }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
@@ -361,4 +364,5 @@ export default {
   onboarding,
   getLeaveSummary,
   getHelpData,
+  updateTaskStatus,
 };

@@ -18,7 +18,7 @@ const Onboarding = () => {
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
 
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state) => state?.profile?.profile);
 
   const [reportingStaff, setReportingStaff] = useState([]);
 
@@ -46,23 +46,55 @@ const Onboarding = () => {
   //   // fetchReportingStaff();
   // }, [accessToken, refreshToken]);
 
+  // const onSubmit = async (data) => {
+  //   setIsSubmitting(true);
+  //   try {
+  //     const payload = {
+  //       // userId: user.userId,
+  //       email: user.email,
+  //       department: user.department,
+  //       role: user.role,
+  //       ...data,
+  //     };
+
+  //     await dispatch(
+  //       completeOnboarding({
+  //         accessToken,
+  //         refreshToken,
+  //         userId: user.userId,
+  //         payload,
+  //       })
+  //     ).unwrap();
+
+  //     showToast("Profile created successfully");
+  //     navigate("/overview");
+  //   } catch (error) {
+  //     console.error("Onboarding failed:", error);
+  //     showToast("Failed to submit profile. Try again.");
+  //   } finally {
+  //     setIsSubmitting(false);
+  //   }
+  // };
+
   const onSubmit = async (data) => {
     setIsSubmitting(true);
     try {
-      const payload = {
-        // userId: user.userId,
-        email: user.email,
-        department: user.department,
-        role: user.role,
-        ...data,
-      };
+      const formData = new FormData();
+
+      formData.append("email", user.email);
+      formData.append("department", user.department);
+      formData.append("role", user.role);
+
+      Object.entries(data).forEach(([key, value]) => {
+        if (value) formData.append(key, value);
+      });
 
       await dispatch(
         completeOnboarding({
           accessToken,
           refreshToken,
           userId: user.userId,
-          payload,
+          payload: formData,
         })
       ).unwrap();
 

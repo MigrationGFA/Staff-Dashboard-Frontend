@@ -18,6 +18,7 @@ import { logout } from "../features/authentication";
 import { PERMISSIONS } from "../component/Permission";
 import api from "../api/dashboardApi";
 import { steps, lowerSteps } from "../data/constant";
+import { clearProfile } from "../features/profile";
 
 const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const DashboardLayout = ({ children }) => {
   // const userPermissions = PERMISSIONS[userPlan] || PERMISSIONS["Admin"] || {};
   // const userImage = useSelector((state) => state.auth.user?.image || null);
   const user = useSelector((state) => state.auth.user);
+  const userProfile = useSelector((state) => state?.profile?.profile);
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   // const userEmail = useSelector((state) => state?.auth?.user.email);
 
@@ -74,6 +76,7 @@ const DashboardLayout = ({ children }) => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(clearProfile());
     navigate("/");
   };
 
@@ -298,7 +301,7 @@ const DashboardLayout = ({ children }) => {
               /> */}
 
               <img
-                src={user?.imageUrl || user?.profile?.imageUrl || Avatar}
+                src={userProfile?.imageUrl || user?.profile?.imageUrl || Avatar}
                 alt="user image"
                 className="rounded-full border-2 border-primary5 bg-primary5 w-8 h-8 mr-2"
               />
