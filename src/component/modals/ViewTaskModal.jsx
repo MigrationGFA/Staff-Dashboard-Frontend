@@ -3,6 +3,7 @@ import { IoClose } from "react-icons/io5";
 import { MdNoteAdd } from "react-icons/md";
 import { useSelector } from "react-redux";
 import api from "../../api/dashboardApi";
+import { showToast } from "../ShowToast";
 
 const ViewTaskModal = ({ isOpen, onClose, id }) => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
@@ -18,6 +19,34 @@ const ViewTaskModal = ({ isOpen, onClose, id }) => {
       });
       setViewDetails(response.result);
       console.log(id);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const markTaskInProgress = async () => {
+    try {
+      const response = await api.updateTaskStatus({
+        accessToken,
+        refreshToken,
+        taskId: id,
+        status: "in-progress",
+      });
+      showToast(response.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const markTaskCompleted = async () => {
+    try {
+      const response = await api.updateTaskStatus({
+        accessToken,
+        refreshToken,
+        taskId: id,
+        status: "complete",
+      });
+      showToast(response.message);
     } catch (error) {
       console.log(error);
     }
@@ -110,10 +139,16 @@ const ViewTaskModal = ({ isOpen, onClose, id }) => {
 
         {/* Buttons */}
         <div className="mt-6 flex justify-start gap-2">
-          <button className="bg-purple-100 text-purple-700 font-semibold rounded-full px-4 py-2 text-sm hover:bg-purple-200 focus:outline-none">
+          <button
+            onClick={markTaskInProgress}
+            className="bg-purple-100 text-purple-700 font-semibold rounded-full px-4 py-2 text-sm hover:bg-purple-200 focus:outline-none"
+          >
             In Progress
           </button>
-          <button className="bg-purple-600 text-white font-semibold rounded-full px-4 py-2 text-sm hover:bg-purple-700 focus:outline-none">
+          <button
+            onClick={markTaskCompleted}
+            className="bg-purple-600 text-white font-semibold rounded-full px-4 py-2 text-sm hover:bg-purple-700 focus:outline-none"
+          >
             Completed
           </button>
         </div>

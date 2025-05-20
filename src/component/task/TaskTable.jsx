@@ -117,7 +117,6 @@ const TaskTable = ({ onTaskAdded }) => {
                     onClick={() => {
                       setSelectedTaskId(task.id);
                       setIsEditModalOpen(true);
-                      console.log("task id check:", task.id);
                     }}
                   >
                     View
@@ -177,7 +176,11 @@ const TaskTable = ({ onTaskAdded }) => {
       {isEditModalOpen && (
         <ViewTaskModal
           isOpen={isEditModalOpen}
-          onClose={() => setIsEditModalOpen(false)}
+          onClose={() => {
+            fetchTasks();
+            onTaskAdded?.();
+            setIsEditModalOpen(false);
+          }}
           id={selectedTaskId}
         />
       )}
