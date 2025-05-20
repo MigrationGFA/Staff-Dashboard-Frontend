@@ -88,7 +88,10 @@ const RequestForm = () => {
         refreshToken,
         email: user.email,
       });
-      setReportingStaff(Array.isArray(response) ? response : [response]);
+      
+      setReportingStaff(
+        Array.isArray(response.officers) ? response.officers : [response.officers]
+      );
     } catch (error) {
       console.log(error);
     }
@@ -287,11 +290,8 @@ const RequestForm = () => {
             <option value="">-- Select Option --</option>
             {reportingStaff.length > 0 &&
               reportingStaff.map((staff) => (
-                <option
-                  key={staff.reportingOfficerId}
-                  value={staff.reportingOfficerId}
-                >
-                  {staff.reportingOfficerName}
+                <option key={staff.id} value={staff.id}>
+                  {staff.name}
                 </option>
               ))}
           </select>

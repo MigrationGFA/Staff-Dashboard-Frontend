@@ -28,7 +28,11 @@ const ProfileForm = () => {
   const [formData, setFormData] = useState({
     fullName: userProfile?.fullName || user?.profile?.fullName || "",
     email: userProfile?.email || "",
-    dob: userProfile?.profile?.dob ? formatDate(user.profile.dob) : "",
+    dob: userProfile?.dob
+      ? formatDate(userProfile?.dob)
+      : user?.profile?.dob
+      ? formatDate(user?.profile?.dob)
+      : "",
     department: user?.department || "",
     role: user?.role || "",
     contractType: user?.contractType || "",
@@ -71,12 +75,11 @@ const ProfileForm = () => {
           user.profile?.fullName ||
           "",
         email: userProfile?.email || user.email || "",
-        dob:
-          userProfile?.dob || user?.profile?.dob
-            ? formatDate(user.profile.dob)
-            : user?.dob
-            ? formatDate(user.dob)
-            : "",
+        dob: userProfile?.dob
+          ? formatDate(userProfile?.dob)
+          : user?.profile?.dob
+          ? formatDate(user?.profile?.dob)
+          : "",
 
         department: user.department || "",
         role: user.role || "",

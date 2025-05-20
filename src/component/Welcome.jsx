@@ -5,20 +5,21 @@ const Welcome = ({ header, message }) => {
   const user = useSelector((state) => state?.auth?.user.profile);
   const userProfile = useSelector((state) => state?.profile?.profile);
   const userRole = useSelector((state) => state?.auth?.user?.role);
-  const defaultMessage = user ? (
-    <TextSpan
-      color=""
-      className="flex items-center justify-center lg:justify-start whitespace-nowrap"
-    >
-      Welcome Back{" "}
-      <div className="font-semibold ms-1">
-        {userProfile?.fullName || user?.fullName}
-      </div>
-      !
-    </TextSpan>
-  ) : (
-    `Hi User, welcome back to Dimp ${userRole || "Staff"}!`
-  );
+  const defaultMessage =
+    user || userProfile ? (
+      <TextSpan
+        color=""
+        className="flex items-center justify-center lg:justify-start whitespace-nowrap"
+      >
+        Welcome Back{" "}
+        <div className="font-semibold ms-1">
+          {userProfile?.fullName || user?.fullName}
+        </div>
+        !
+      </TextSpan>
+    ) : (
+      `Hi User, welcome back to Dimp ${userRole || "Staff"}!`
+    );
   return (
     <div className="w-full flex flex-col py-4 lg:py-10">
       <Heading

@@ -30,13 +30,18 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
 
   const fetchAssignTo = async () => {
     try {
-      const response = await api.getTaskAssignee({
+      const response = await api.getStaffDetails({
         accessToken,
         refreshToken,
         userEmail: user.email,
+        department: user.department,
       });
-      setAssignedTo(Array.isArray(response) ? response : [response]);
-      setAssignedBy(Array.isArray(response) ? response : [response]);
+      const staffData = Array.isArray(response.data)
+        ? response.data
+        : [response.data];
+      setAssignedTo(staffData);
+      setAssignedBy(staffData);
+      console.log(staffData);
     } catch (error) {
       console.log(error);
     }
@@ -123,11 +128,8 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
               >
                 <option value="">-- Select Option --</option>
                 {assignedBy?.map((option) => (
-                  <option
-                    key={option.reportingOfficerId}
-                    value={option.reportingOfficerId}
-                  >
-                    {option?.reportingOfficerName}
+                  <option key={option._id} value={option._id}>
+                    {option?.profile?.fullName}
                   </option>
                 ))}
               </select>
@@ -143,11 +145,8 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
               >
                 <option value="">-- Select Option --</option>
                 {assignedTo?.map((option) => (
-                  <option
-                    key={option.reportingOfficerId}
-                    value={option.reportingOfficerId}
-                  >
-                    {option?.reportingOfficerName}
+                  <option key={option._id} value={option._id}>
+                    {option?.profile?.fullName}
                   </option>
                 ))}
               </select>

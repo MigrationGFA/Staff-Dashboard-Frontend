@@ -3,13 +3,13 @@ import api from "../api/authRoute";
 import { setProfile } from "./profile";
 
 // Initial state for authentication
-const initialState = {
+const initialState = () => ({
   user: null,
   accessToken: null,
   refreshToken: null,
   isLoading: false,
   error: null,
-};
+});
 
 // staff login
 export const adminLogin = createAsyncThunk(
@@ -53,7 +53,7 @@ export const completeOnboarding = createAsyncThunk(
 // Auth slice
 const authSlice = createSlice({
   name: "auth",
-  initialState,
+  initialState: initialState(),
   reducers: {
     logout: (state) => {
       state.user = null;
