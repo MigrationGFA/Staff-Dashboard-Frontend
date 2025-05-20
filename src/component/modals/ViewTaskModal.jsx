@@ -124,7 +124,7 @@ const ViewTaskModal = ({ isOpen, onClose, id }) => {
           </div>
 
           {/* Feedback */}
-          <div className="col-span-2 mt-4 border-b py-2">
+          {/* <div className="col-span-2 mt-4 border-b py-2">
             <label className="block text-gray-600 text-sm font-semibold mb-1">
               Feedback
             </label>
@@ -134,7 +134,7 @@ const ViewTaskModal = ({ isOpen, onClose, id }) => {
               // value={feedback}
               // onChange={(e) => setFeedback(e.target.value)}
             />
-          </div>
+          </div> */}
         </div>
 
         {/* Buttons */}
