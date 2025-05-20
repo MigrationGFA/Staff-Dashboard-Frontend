@@ -85,11 +85,11 @@ const getreportingStaff = async ({ accessToken, refreshToken, email }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
 
   try {
-    const response = await authFetch.post(
-      `${PLAIN_API_URL}/reporting-officer`,
-      {
-        email,
-      }
+    const response = await authFetch.get(
+      `${PLAIN_API_URL}/reporting-officer`
+      // {
+      //   email,
+      // }
     );
 
     return response.data;
