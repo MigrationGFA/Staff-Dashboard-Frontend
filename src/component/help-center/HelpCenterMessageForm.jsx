@@ -4,6 +4,7 @@ import { ButtonSmallPurple, ButtonSmallWhite } from "../Buttons";
 import api from "../../api/dashboardApi"; // Import your API utility
 import { showToast } from "../ShowToast"; // Import your toast utility
 import { useSelector } from "react-redux";
+import { FaSpinner } from "react-icons/fa";
 
 const HelpCenterMessageForm = () => {
   const navigate = useNavigate();
@@ -15,12 +16,16 @@ const HelpCenterMessageForm = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const user = useSelector((state) => state.auth?.user);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    setIsSubmitting(true);
     try {
       const response = await api.submitHelpCenterMessage({
         accessToken,
@@ -33,6 +38,8 @@ const HelpCenterMessageForm = () => {
       navigate(-1); // Navigate back after successful submission
     } catch (error) {
       console.error("Error submitting help center message:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -84,8 +91,17 @@ const HelpCenterMessageForm = () => {
           width=""
           type="submit"
           className="py-3.5 px-6 rounded-lg"
+          disabled={isSubmitting}
         >
-          Submit
+          {" "}
+          {isSubmitting ? (
+            <div className="flex items-center justify-center space-x-2">
+              <FaSpinner className="animate-spin text-white text-lg" />
+              <span>Submitting...</span>
+            </div>
+          ) : (
+            "Submit"
+          )}
         </ButtonSmallPurple>
       </div>
     </form>
