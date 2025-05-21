@@ -348,7 +348,7 @@ const ProfileForm = () => {
           <label className="block text-gray-600">Next Of Kin</label>
           <input
             type="text"
-            name="nextOfKin"
+            name="nextOfKinName"
             value={formData.nextOfKinName}
             onChange={handleInputChange}
             className="w-full rounded-lg focus:ring-primary11"
