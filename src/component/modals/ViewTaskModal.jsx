@@ -18,7 +18,6 @@ const ViewTaskModal = ({ isOpen, onClose, id }) => {
         taskId: id,
       });
       setViewDetails(response.result);
-      console.log(id);
     } catch (error) {
       console.log(error);
     }
@@ -47,6 +46,7 @@ const ViewTaskModal = ({ isOpen, onClose, id }) => {
         status: "complete",
       });
       showToast(response.message);
+      onClose();
     } catch (error) {
       console.log(error);
     }
