@@ -255,7 +255,7 @@ const DashboardLayout = ({ children }) => {
       </div>
 
       {/* Main Content */}
-      <div className="w-full h-screen grid grid-cols-1 font-body ">
+      <div className="w-full h-screen flex flex-col font-body ">
         <div className="hidden lg:block">
           <div className="flex items-center justify-between bg-white p-4 border-b-2">
             {isSidebarOpen ? (
@@ -274,17 +274,6 @@ const DashboardLayout = ({ children }) => {
                 />
               </>
             )}
-            <div className="flex justify-between w-4/12">
-              {/* Navigation Links */}
-              {/* <div className="relative flex items-center lg:space-x-4 ">
-                <LongInputWithPlaceholder
-                  type="text"
-                  placeholder="Search here..."
-                  className="appearance-none bg-transparent border rounded-lg w-full text-gray-700 leading-tight pr-44 focus:border-primary3"
-                />
-                <IoIosSearch size={30} className="absolute right-0" />
-              </div> */}
-            </div>
 
             {/* User Controls (Notification, Theme Switch, Profile) */}
             <div className="flex items-center mr-8">
@@ -501,7 +490,7 @@ const DashboardLayout = ({ children }) => {
         </div>
 
         {/* Main Content Area */}
-        <div className="col-span-1 overflow-y-auto overflow-x-hidden ">
+        <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-start">
           <div className="px-4 lg:px-8">{children}</div>
         </div>
       </div>

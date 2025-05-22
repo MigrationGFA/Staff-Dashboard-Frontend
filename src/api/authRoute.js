@@ -1,5 +1,4 @@
 import axios from "axios";
-import { updateAccessToken } from "../features/authentication";
 import AxiosInterceptor from "../component/AxiosInterceptor";
 
 // Define your API endpoints
@@ -30,11 +29,12 @@ const adminForgetPassword = async ({ email }) => {
   }
 };
 
-const adminResetPassword = async ({ email, newPassword }) => {
+const adminResetPassword = async ({ email, password, verifyOtp }) => {
   try {
     const response = await axios.post(`${PLAIN_API_URL}/reset-password`, {
       email,
-      newPassword,
+      password,
+      verifyOtp,
     });
 
     return response;
@@ -42,17 +42,18 @@ const adminResetPassword = async ({ email, newPassword }) => {
     console.log("error on reset:", error);
   }
 };
-const adminVerifyOtp = async ({ email, OTP }) => {
-  try {
-    const response = await axios.post(`${API_URL}/verify-password`, {
-      email,
-      OTP,
-    });
-    return response;
-  } catch (error) {
-    throw new Error(error.response?.data?.message || "Password reset failed");
-  }
-};
+
+// const adminVerifyOtp = async ({ email, OTP }) => {
+//   try {
+//     const response = await axios.post(`${API_URL}/verify-password`, {
+//       email,
+//       OTP,
+//     });
+//     return response;
+//   } catch (error) {
+//     throw new Error(error.response?.data?.message || "Password reset failed");
+//   }
+// };
 
 const onboarding = async ({ accessToken, refreshToken, userId, payload }) => {
   const authFetch = AxiosInterceptor(accessToken, refreshToken);
@@ -74,6 +75,5 @@ export default {
   adminLogin,
   adminForgetPassword,
   adminResetPassword,
-  adminVerifyOtp,
   onboarding,
 };

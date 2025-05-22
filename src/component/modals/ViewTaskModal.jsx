@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { IoClose } from "react-icons/io5";
-import { MdNoteAdd } from "react-icons/md";
 import { useSelector } from "react-redux";
 import api from "../../api/dashboardApi";
 import { showToast } from "../ShowToast";

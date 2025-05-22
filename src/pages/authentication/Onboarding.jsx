@@ -7,8 +7,7 @@ import { ButtonLongPurple } from "../../component/Buttons";
 import { LongInputWithPlaceholder } from "../../component/Inputs";
 import { showToast } from "../../component/ShowToast";
 import LoginImage from "../../assets/login-image.png";
-import api from "../../api/dashboardApi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { completeOnboarding } from "../../features/authentication";
 
 const Onboarding = () => {
@@ -19,8 +18,6 @@ const Onboarding = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
 
   const user = useSelector((state) => state?.auth?.user);
-
-  const [reportingStaff, setReportingStaff] = useState([]);
 
   const {
     register,
@@ -108,6 +105,12 @@ const Onboarding = () => {
     }
   };
 
+  const onError = (errors) => {
+    Object.values(errors).forEach((error) => {
+      showToast(error.message);
+    });
+  };
+
   return (
     <div className="p-6 mx-auto my-10 font-body">
       <h2 className="text-4xl font-semibold mt-2 text-center">
@@ -119,7 +122,7 @@ const Onboarding = () => {
           <img src={LoginImage} alt="Login" />
         </div>
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit, onError)}
           className="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 p-8"
         >
           <div>
@@ -214,7 +217,7 @@ const Onboarding = () => {
               htmlFor="imageUrl"
               className="block text-sm font-medium text-gray-700"
             >
-              Image
+              Profile Image
             </label>
             <input
               type="file"

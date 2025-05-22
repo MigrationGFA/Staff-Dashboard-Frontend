@@ -9,9 +9,9 @@ export default defineConfig({
     VitePWA({
       registerType: "autoUpdate",
       manifest: {
-        name: "DIMP-STAFF-DASHBOARD",
-        short_name: "DIMP-STAFF-DASHBOARD",
-        description: "WebSite-Creation",
+        name: "GFA-STAFF",
+        short_name: "GFA-STAFF",
+        description: "GFA-STAFF-DASHBOARD",
         theme_color: "#2B3286",
         icons: [
           {
