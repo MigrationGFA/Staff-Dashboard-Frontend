@@ -15,6 +15,9 @@ const Onboarding = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [profileImage, setProfileImage] = useState(null);
 
+  const [allergyInput, setAllergyInput] = useState("");
+  const [allergiesList, setAllergiesList] = useState([]);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
@@ -135,6 +138,22 @@ const Onboarding = () => {
       };
       reader.readAsDataURL(file);
     }
+  };
+
+  const handleAddAllergy = () => {
+    const trimmed = allergyInput.trim();
+    if (trimmed && !allergiesList.includes(trimmed)) {
+      const updatedAllergies = [...allergiesList, trimmed];
+      setAllergiesList(updatedAllergies);
+      setValue("allergies", updatedAllergies);
+      setAllergyInput("");
+    }
+  };
+
+  const handleRemoveAllergy = (item) => {
+    const updatedAllergies = allergiesList.filter((i) => i !== item);
+    setAllergiesList(updatedAllergies);
+    setValue("allergies", updatedAllergies);
   };
 
   const onError = (errors) => {
@@ -367,24 +386,45 @@ const Onboarding = () => {
               </div>
 
               <div>
-                <label
-                  htmlFor="allergies"
-                  className="block text-sm font-medium text-gray-700"
-                >
-                  Allergies (comma-separated)
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Allergies
                 </label>
-                <LongInputWithPlaceholder
-                  id="allergies"
-                  placeholder="e.g. Peanuts, Pollen, Dust"
-                  onChange={(e) => {
-                    const allergiesArray = e.target.value
-                      .split(",")
-                      .map((item) => item.trim())
-                      .filter(Boolean);
-                    setValue("allergies", allergiesArray);
-                  }}
-                  className="border rounded-md border-primary5"
-                />
+                <div className="flex gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={allergyInput}
+                    onChange={(e) => setAllergyInput(e.target.value)}
+                    placeholder="e.g. Peanuts"
+                    className="flex-1 px-3 py-2 border rounded-md"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleAddAllergy}
+                    className="px-4 py-2 text-white bg-purple-600 rounded-md"
+                  >
+                    Add
+                  </button>
+                </div>
+
+                {allergiesList.length > 0 && (
+                  <div className="flex flex-wrap gap-2">
+                    {allergiesList.map((item, index) => (
+                      <span
+                        key={index}
+                        className="flex items-center px-2 py-1 text-sm bg-purple-100 text-purple-700 rounded-full"
+                      >
+                        {item}
+                        <button
+                          type="button"
+                          onClick={() => handleRemoveAllergy(item)}
+                          className="ml-2 text-purple-600 hover:text-red-500"
+                        >
+                          ×
+                        </button>
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

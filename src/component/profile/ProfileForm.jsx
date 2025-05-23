@@ -147,12 +147,11 @@ const ProfileForm = () => {
       // }
       for (const key in formData) {
         if (key !== "newAllergy") {
-          data.append(
-            key,
-            Array.isArray(formData[key])
-              ? JSON.stringify(formData[key])
-              : formData[key]
-          );
+          if (Array.isArray(formData[key])) {
+            data.append(key, formData[key].length > 0 ? formData[key] : "");
+          } else {
+            data.append(key, formData[key]);
+          }
         }
       }
 
@@ -214,7 +213,7 @@ const ProfileForm = () => {
             General Details
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
             <div className="col-span-2 lg:col-span-1">
               <label className="block text-gray-600">Full Name</label>
               <input
@@ -333,7 +332,7 @@ const ProfileForm = () => {
           <h3 className="text-md font-semibold mb-3 text-gray-700">
             Next of kin Details
           </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
             <div className="col-span-2 lg:col-span-1">
               <label className="block text-gray-600">Next Of Kin Name</label>
               <input
@@ -377,7 +376,7 @@ const ProfileForm = () => {
             Medical Details
           </h3>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 items-center">
             {/* Genotype */}
             <div className="col-span-2 lg:col-span-1">
               <label className="block text-gray-600">Genotype</label>
