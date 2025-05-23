@@ -5,14 +5,19 @@ import api from "../../api/dashboardApi";
 import { useSelector } from "react-redux";
 import { useState } from "react";
 import { showToast } from "../ShowToast";
+import { FaSpinner } from "react-icons/fa"; // optional spinner icon
 
 const DailyAttendance = () => {
   const [code, setCode] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
   const email = useSelector((state) => state.auth?.user?.email);
 
   const handleCheckIn = async () => {
+    if (!code.trim()) return;
+    setIsLoading(true);
+
     try {
       const response = await api.checkIn({
         accessToken,
@@ -20,9 +25,12 @@ const DailyAttendance = () => {
         email,
         code,
       });
-      showToast(response?.message)
+      showToast(response?.message);
     } catch (error) {
-      console.log("Error submitting check In:", error);
+      console.error("Error submitting check-in:", error);
+      showToast("Failed to check in. Try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -31,34 +39,33 @@ const DailyAttendance = () => {
       <div className="flex flex-col lg:flex-row items-center gap-2 lg:space-x-4">
         <Heading
           className="text-2xl lg:text-xl text-sec11"
-          size=""
-          color=""
           weight="font-semibold"
           font="font-body"
-          lineHeight=""
         >
           Daily Attendance Code
         </Heading>
         <ShortInputWithPlaceholder
           placeholder="Input Code..."
-          size=""
-          color=""
-          weight="font-normal"
-          lineHeight=""
           className="border-primary3 border-2 focus:ring-primary11 rounded-lg text-sec11"
           onChange={(e) => setCode(e.target.value)}
+          value={code}
           required
         />
       </div>
       <ButtonSmallPurple
-        className="py-3 px-3.5 rounded-lg"
-        width=""
+        className="py-3 px-3.5 rounded-lg flex items-center justify-center"
         bg="primary3"
-        padding=""
-        height=""
         onClick={handleCheckIn}
+        disabled={!code.trim() || isLoading}
       >
-        Check In
+        {isLoading ? (
+          <div className="flex items-center space-x-2">
+            <FaSpinner className="animate-spin text-white text-base" />
+            <span>Checking In...</span>
+          </div>
+        ) : (
+          "Check In"
+        )}
       </ButtonSmallPurple>
     </div>
   );

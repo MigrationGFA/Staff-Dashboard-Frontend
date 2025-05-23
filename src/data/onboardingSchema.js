@@ -8,9 +8,9 @@ export const onboardingSchema = yup.object().shape({
   phone: yup.number().required("Phone number is required"),
   address: yup.string().required("Address is required"),
   maritalStatus: yup.string().required("Marital status is required"),
-  medicalStatus: yup.string().required("Medical status is required"),
   dob: yup.date().required("Date of birth is required"),
+  genotype: yup.string().required("Genotype is required"),
+  bloodGroup: yup.string().required("Blood group is required"),
+  allergies: yup.array().of(yup.string()).required("Allergies are required"),
   image: yup.mixed().required("Image is required"),
-  // reportingOfficer: yup.string().required("Reporting Officer is required"),
-  medicalDescription: yup.string().required("Medical Description is required"),
 });
