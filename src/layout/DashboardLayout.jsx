@@ -391,7 +391,7 @@ const DashboardLayout = ({ children }) => {
               <img
                 src={Logo}
                 alt="Logo"
-                className={`transition-all duration-300 w-11`}
+                className={`transition-all duration-300 w-8`}
               />
             </Link>
             <button
@@ -491,7 +491,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* Main Content Area */}
         <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col justify-start">
-          <div className="px-4 lg:px-8">{children}</div>
+          <div className="px-4 lg:px-8 my-2">{children}</div>
         </div>
       </div>
     </div>
