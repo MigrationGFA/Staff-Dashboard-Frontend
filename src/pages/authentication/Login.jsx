@@ -12,7 +12,7 @@ import { adminLogin } from "../../features/authentication";
 import { showToast } from "../../component/ShowToast";
 import { LabelImportant } from "../../component/Label";
 import { useState } from "react";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { FaRegEye, FaRegEyeSlash, FaSpinner } from "react-icons/fa";
 
 // Define the Yup validation schema
 const schema = yup.object().shape({
@@ -84,7 +84,7 @@ const Login = () => {
 
           <div className="w-full lg:w-1/2 p-8">
             <Link to="/">
-              <img src={Logo} alt="Logo" className="w-[100px] lg:w-[130px]" />
+              <img src={Logo} alt="Logo" className="w-[100px] lg:w-[90px]" />
             </Link>
 
             <Heading
@@ -173,7 +173,10 @@ const Login = () => {
                   type="submit"
                   disabled
                 >
-                  Logging In...
+                  <div className="flex items-center space-x-2">
+                    <FaSpinner className="animate-spin text-white text-lg" />
+                    <span>Logging In...</span>
+                  </div>
                 </ButtonLongPurple>
               ) : (
                 <ButtonLongPurple className="w-full" type="submit">

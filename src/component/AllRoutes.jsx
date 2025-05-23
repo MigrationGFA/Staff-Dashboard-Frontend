@@ -98,7 +98,7 @@ const AllRoutes = () => {
           onClick={handleInstallClick}
           style={installButtonStyles}
         >
-          Install DIMP-ADMIN
+          Install Dashboard
         </button>
       )}
     </div>
@@ -110,11 +110,13 @@ const installButtonStyles = {
   bottom: "20px",
   left: "20px",
   padding: "10px 20px",
-  backgroundColor: "#2B3286",
+  backgroundColor: "#6c2bd9",
   color: "#fff",
   border: "none",
   borderRadius: "5px",
   cursor: "pointer",
 };
+
+// #2B3286
 
 export default AllRoutes;

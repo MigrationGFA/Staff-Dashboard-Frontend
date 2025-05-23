@@ -7,9 +7,9 @@ import { ButtonLongPurple } from "../../component/Buttons";
 import { LongInputWithPlaceholder } from "../../component/Inputs";
 import { showToast } from "../../component/ShowToast";
 import LoginImage from "../../assets/login-image.png";
-import api from "../../api/dashboardApi";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { completeOnboarding } from "../../features/authentication";
+import { FaSpinner } from "react-icons/fa";
 
 const Onboarding = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -19,8 +19,6 @@ const Onboarding = () => {
   const { accessToken, refreshToken } = useSelector((state) => state.auth);
 
   const user = useSelector((state) => state?.auth?.user);
-
-  const [reportingStaff, setReportingStaff] = useState([]);
 
   const {
     register,
@@ -85,8 +83,16 @@ const Onboarding = () => {
       formData.append("department", user.department);
       formData.append("role", user.role);
 
+      // Object.entries(data).forEach(([key, value]) => {
+      //   if (value) formData.append(key, value);
+      // });
+
       Object.entries(data).forEach(([key, value]) => {
-        if (value) formData.append(key, value);
+        if (key === "image" && value?.startsWith("data:image")) {
+          formData.append("image", value);
+        } else if (value) {
+          formData.append(key, value);
+        }
       });
 
       await dispatch(
@@ -108,6 +114,12 @@ const Onboarding = () => {
     }
   };
 
+  const onError = (errors) => {
+    Object.values(errors).forEach((error) => {
+      showToast(error.message);
+    });
+  };
+
   return (
     <div className="p-6 mx-auto my-10 font-body">
       <h2 className="text-4xl font-semibold mt-2 text-center">
@@ -119,7 +131,7 @@ const Onboarding = () => {
           <img src={LoginImage} alt="Login" />
         </div>
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit, onError)}
           className="grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-2 p-8"
         >
           <div>
@@ -214,7 +226,7 @@ const Onboarding = () => {
               htmlFor="imageUrl"
               className="block text-sm font-medium text-gray-700"
             >
-              Image
+              Profile Image
             </label>
             <input
               type="file"
@@ -223,7 +235,7 @@ const Onboarding = () => {
                 const fileInput = e.target;
                 const file = fileInput.files[0];
                 if (file) {
-                  const maxSizeInBytes = 3 * 1024 * 1024; // 3MB in bytes
+                  const maxSizeInBytes = 3 * 1024 * 1024; // 3MB
                   if (file.size > maxSizeInBytes) {
                     showToast(
                       "File size exceeds 3MB. Please upload a smaller image."
@@ -231,8 +243,12 @@ const Onboarding = () => {
                     fileInput.value = "";
                     return;
                   }
-                  const imagePreviewUrl = URL.createObjectURL(file);
-                  setValue("image", imagePreviewUrl);
+
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setValue("image", reader.result);
+                  };
+                  reader.readAsDataURL(file);
                 }
               }}
               className="block w-full text-sm text-gray-700 border rounded-lg"
@@ -323,7 +339,14 @@ const Onboarding = () => {
               className="w-full"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Submitting..." : "Submit Onboarding"}
+              {isSubmitting ? (
+                <div className="flex items-center space-x-2">
+                  <FaSpinner className="animate-spin text-white text-lg" />
+                  <span>Submitting...</span>
+                </div>
+              ) : (
+                "Submit Onboarding"
+              )}
             </ButtonLongPurple>
           </div>
         </form>
