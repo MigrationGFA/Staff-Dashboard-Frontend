@@ -10,7 +10,7 @@ export const onboardingSchema = yup.object().shape({
   maritalStatus: yup.string().required("Marital status is required"),
   medicalStatus: yup.string().required("Medical status is required"),
   dob: yup.date().required("Date of birth is required"),
-  image: yup.string().required("Image is required"),
+  image: yup.mixed().required("Image is required"),
   // reportingOfficer: yup.string().required("Reporting Officer is required"),
   medicalDescription: yup.string().required("Medical Description is required"),
 });

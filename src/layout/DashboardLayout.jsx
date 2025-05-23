@@ -391,7 +391,7 @@ const DashboardLayout = ({ children }) => {
               <img
                 src={Logo}
                 alt="Logo"
-                className={`transition-all duration-300 w-24`}
+                className={`transition-all duration-300 w-11`}
               />
             </Link>
             <button

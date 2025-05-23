@@ -13,6 +13,7 @@ import { FaSpinner } from "react-icons/fa";
 
 const Onboarding = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -79,21 +80,20 @@ const Onboarding = () => {
     try {
       const formData = new FormData();
 
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(key, value);
+        }
+      });
+
       formData.append("email", user.email);
       formData.append("department", user.department);
       formData.append("role", user.role);
 
-      // Object.entries(data).forEach(([key, value]) => {
-      //   if (value) formData.append(key, value);
-      // });
-
-      Object.entries(data).forEach(([key, value]) => {
-        if (key === "image" && value?.startsWith("data:image")) {
-          formData.append("image", value);
-        } else if (value) {
-          formData.append(key, value);
-        }
-      });
+      const fileInput = document.getElementById("profileImageInput");
+      if (fileInput?.files?.[0]) {
+        formData.append("image", fileInput.files[0]);
+      }
 
       await dispatch(
         completeOnboarding({
@@ -111,6 +111,29 @@ const Onboarding = () => {
       showToast("Failed to submit profile. Try again.");
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleProfileImageChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const maxSizeInMB = 3;
+      const maxSizeInBytes = maxSizeInMB * 1024 * 1024;
+
+      if (file.size > maxSizeInBytes) {
+        showToast(
+          `File size exceeds ${maxSizeInMB}MB. Please upload a smaller file.`,
+          "error"
+        );
+        event.target.value = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setProfileImage(reader.result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -221,6 +244,17 @@ const Onboarding = () => {
               {...register("dob")}
             />
           </div>
+          {/* <div className="w-36 h-36 bg-gray-300 rounded-full flex items-center justify-center border border-sec11">
+            {profileImage ? (
+              <img
+                src={profileImage}
+                alt="Profile"
+                className="w-full h-full rounded-full"
+              />
+            ) : (
+              <span className="text-sec11">Add Image</span>
+            )}
+          </div> */}
           <div>
             <label
               htmlFor="imageUrl"
@@ -231,27 +265,10 @@ const Onboarding = () => {
             <input
               type="file"
               accept="image/*"
-              onChange={(e) => {
-                const fileInput = e.target;
-                const file = fileInput.files[0];
-                if (file) {
-                  const maxSizeInBytes = 3 * 1024 * 1024; // 3MB
-                  if (file.size > maxSizeInBytes) {
-                    showToast(
-                      "File size exceeds 3MB. Please upload a smaller image."
-                    );
-                    fileInput.value = "";
-                    return;
-                  }
-
-                  const reader = new FileReader();
-                  reader.onloadend = () => {
-                    setValue("image", reader.result);
-                  };
-                  reader.readAsDataURL(file);
-                }
-              }}
+              onChange={handleProfileImageChange}
+              {...register("image")}
               className="block w-full text-sm text-gray-700 border rounded-lg"
+              id="profileImageInput"
             />
           </div>
           {/* <div>
@@ -340,7 +357,7 @@ const Onboarding = () => {
               disabled={isSubmitting}
             >
               {isSubmitting ? (
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center justify-center space-x-2">
                   <FaSpinner className="animate-spin text-white text-lg" />
                   <span>Submitting...</span>
                 </div>

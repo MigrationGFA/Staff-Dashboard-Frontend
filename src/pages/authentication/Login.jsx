@@ -173,7 +173,7 @@ const Login = () => {
                   type="submit"
                   disabled
                 >
-                  <div className="flex items-center space-x-2">
+                  <div className="flex items-center justify-center space-x-2">
                     <FaSpinner className="animate-spin text-white text-lg" />
                     <span>Logging In...</span>
                   </div>
