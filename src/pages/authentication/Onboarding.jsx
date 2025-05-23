@@ -9,6 +9,7 @@ import { showToast } from "../../component/ShowToast";
 import LoginImage from "../../assets/login-image.png";
 import { useState } from "react";
 import { completeOnboarding } from "../../features/authentication";
+import { FaSpinner } from "react-icons/fa";
 
 const Onboarding = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -82,8 +83,16 @@ const Onboarding = () => {
       formData.append("department", user.department);
       formData.append("role", user.role);
 
+      // Object.entries(data).forEach(([key, value]) => {
+      //   if (value) formData.append(key, value);
+      // });
+
       Object.entries(data).forEach(([key, value]) => {
-        if (value) formData.append(key, value);
+        if (key === "image" && value?.startsWith("data:image")) {
+          formData.append("image", value);
+        } else if (value) {
+          formData.append(key, value);
+        }
       });
 
       await dispatch(
@@ -226,7 +235,7 @@ const Onboarding = () => {
                 const fileInput = e.target;
                 const file = fileInput.files[0];
                 if (file) {
-                  const maxSizeInBytes = 3 * 1024 * 1024; // 3MB in bytes
+                  const maxSizeInBytes = 3 * 1024 * 1024; // 3MB
                   if (file.size > maxSizeInBytes) {
                     showToast(
                       "File size exceeds 3MB. Please upload a smaller image."
@@ -234,8 +243,12 @@ const Onboarding = () => {
                     fileInput.value = "";
                     return;
                   }
-                  const imagePreviewUrl = URL.createObjectURL(file);
-                  setValue("image", imagePreviewUrl);
+
+                  const reader = new FileReader();
+                  reader.onloadend = () => {
+                    setValue("image", reader.result);
+                  };
+                  reader.readAsDataURL(file);
                 }
               }}
               className="block w-full text-sm text-gray-700 border rounded-lg"
@@ -326,7 +339,14 @@ const Onboarding = () => {
               className="w-full"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Submitting..." : "Submit Onboarding"}
+              {isSubmitting ? (
+                <div className="flex items-center space-x-2">
+                  <FaSpinner className="animate-spin text-white text-lg" />
+                  <span>Submitting...</span>
+                </div>
+              ) : (
+                "Submit Onboarding"
+              )}
             </ButtonLongPurple>
           </div>
         </form>

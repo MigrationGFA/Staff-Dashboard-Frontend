@@ -6,11 +6,11 @@ import LoginImage from "../../assets/login-image.png";
 import Logo from "../../assets/DIMP logo colored.png";
 import { showToast } from "../../component/ShowToast";
 import api from "../../api/authRoute";
-import { ButtonForTabs, ButtonSmallPurple } from "../../component/Buttons";
+import { ButtonSmallPurple } from "../../component/Buttons";
 import { LongInputWithPlaceholder } from "../../component/Inputs";
 import { LabelImportant } from "../../component/Label";
-import { Text } from "../../component/Text";
 import { useState } from "react";
+import { FaSpinner } from "react-icons/fa";
 
 // Yup validation schema
 const schema = yup.object().shape({
@@ -24,6 +24,7 @@ const ForgotPassword = () => {
   const navigate = useNavigate();
 
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Initialize form with validation
   const {
@@ -37,6 +38,7 @@ const ForgotPassword = () => {
   // Function to handle form submission
   const onSubmit = async (data, e) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
       const response = await api.adminForgetPassword({
@@ -52,6 +54,8 @@ const ForgotPassword = () => {
       }
     } catch (error) {
       showToast("An unexpected error occurred. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -112,8 +116,16 @@ const ForgotPassword = () => {
               <ButtonSmallPurple
                 type="submit"
                 className="w-full font-semibold py-2 rounded-md transition duration-300"
+                disabled={loading}
               >
-                Send Reset Link
+                {loading ? (
+                  <div className="flex items-center space-x-2">
+                    <FaSpinner className="animate-spin text-white text-lg" />
+                    <span>Sending...</span>
+                  </div>
+                ) : (
+                  "Send Reset Link"
+                )}
               </ButtonSmallPurple>
             </form>
 
