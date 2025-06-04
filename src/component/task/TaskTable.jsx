@@ -34,6 +34,7 @@ const TaskTable = ({ onTaskAdded }) => {
           endDate: new Date(task.endDate).toLocaleDateString(),
           description: task.shortDescription,
           status: task.status,
+          approval: task.approvalStatus,
         })
       );
 
@@ -103,7 +104,10 @@ const TaskTable = ({ onTaskAdded }) => {
                 <td className="p-3 italic">
                   <span
                     className={`px-3 py-1 rounded-lg text-sm font-semibold ${
-                      task.status === "pending"
+                      task?.status === "completed" ||
+                      task.approval === "approved"
+                        ? "bg-green-800 text-green-300"
+                        : task.status === "pending"
                         ? "bg-yellow-300 text-yellow-800"
                         : "bg-green-300 text-green-800"
                     }`}
