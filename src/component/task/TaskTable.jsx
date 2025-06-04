@@ -112,7 +112,7 @@ const TaskTable = ({ onTaskAdded }) => {
                         : "bg-green-300 text-green-800"
                     }`}
                   >
-                    {task.status}
+                    {task.approval === "approved" ? "Approved" : task.status}
                   </span>
                 </td>
                 <td className="p-3">
