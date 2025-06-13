@@ -277,12 +277,12 @@ const DashboardLayout = ({ children }) => {
 
             {/* User Controls (Notification, Theme Switch, Profile) */}
             <div className="flex items-center mr-8">
-              <img
+              {/* <img
                 src={NotificationIcon}
                 alt="Notifications"
                 className="w-8 h-auto p-1 cursor-pointer border border-sec2 rounded-lg hover:bg-primary6 mr-4"
                 onClick={toggleNotification}
-              />
+              /> */}
               {/* <img
                 src={ThemeSwitchIcon}
                 alt="Theme Switch"
