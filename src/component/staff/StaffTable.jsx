@@ -96,10 +96,10 @@ const StaffTable = () => {
                   <td className="p-3">
                     <span
                       className={`px-3 py-1 rounded-lg text-sm font-semibold ${getStatusClass(
-                        staff.fullProfile
+                        staff.isProfileCreated
                       )}`}
                     >
-                      {staff.fullProfile ? "Active" : "Pending"}
+                      {staff.isProfileCreated ? "Active" : "Pending"}
                     </span>
                   </td>
                 </tr>
