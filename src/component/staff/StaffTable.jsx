@@ -90,9 +90,9 @@ const StaffTable = () => {
               currentStaff?.map((staff) => (
                 <tr key={staff.id} className="border-t text-sec11">
                   <td className="p-3">{staff.profile?.fullName}</td>
-                  <td className="p-3">{staff.role}</td>
-                  <td className="p-3">{staff.contractType}</td>
-                  <td className="p-3">{formatDate(staff.dateOfResumption)}</td>
+                  <td className="p-3">{staff.user?.role}</td>
+                  <td className="p-3">{staff.user?.contractType}</td>
+                  <td className="p-3">{formatDate(staff.user?.dateOfResumption)}</td>
                   <td className="p-3">
                     <span
                       className={`px-3 py-1 rounded-lg text-sm font-semibold ${getStatusClass(
