@@ -129,7 +129,7 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
                 <option value="">-- Select Option --</option>
                 {assignedBy?.map((option) => (
                   <option key={option._id} value={option._id}>
-                    {option?.profile?.fullName}
+                    {option?.profile}
                   </option>
                 ))}
               </select>
@@ -146,7 +146,7 @@ const AddTaskModal = ({ isOpen, onClose, onTaskAdded }) => {
                 <option value="">-- Select Option --</option>
                 {assignedTo?.map((option) => (
                   <option key={option._id} value={option._id}>
-                    {option?.profile?.fullName}
+                    {option?.profile}
                   </option>
                 ))}
               </select>

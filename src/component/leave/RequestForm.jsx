@@ -184,6 +184,11 @@ const RequestForm = () => {
             <option value="">--Select Option--</option>
             <option value="casual leave">Casual Leave</option>
             <option value="sick leave">Sick Leave</option>
+            <option value="annual leave">Annual Leave</option>
+            <option value="emergency leave">Emergency Leave</option>
+            <option value="study leave">Study Leave</option>
+            <option value="paternity leave">Paternity Leave</option>
+            <option value="maternity leave">Maternity Leave</option>
           </select>
         </div>
 
