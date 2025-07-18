@@ -89,7 +89,7 @@ const StaffTable = () => {
             {staff.length > 0 &&
               currentStaff?.map((staff) => (
                 <tr key={staff.id} className="border-t text-sec11">
-                  <td className="p-3">{staff.profile?.fullName}</td>
+                  <td className="p-3">{staff.profile}</td>
                   <td className="p-3">{staff.role}</td>
                   <td className="p-3">{staff.contractType}</td>
                   <td className="p-3">{formatDate(staff.dateOfResumption)}</td>
