@@ -88,9 +88,11 @@ const RequestForm = () => {
         refreshToken,
         email: user.email,
       });
-      
+
       setReportingStaff(
-        Array.isArray(response.officers) ? response.officers : [response.officers]
+        Array.isArray(response.officers)
+          ? response.officers
+          : [response.officers]
       );
     } catch (error) {
       console.log(error);
@@ -173,6 +175,7 @@ const RequestForm = () => {
           />
         </div>
 
+        {/* leave types field */}
         <div className="flex flex-col space-y-1">
           <label>Leave Type</label>
           <select
