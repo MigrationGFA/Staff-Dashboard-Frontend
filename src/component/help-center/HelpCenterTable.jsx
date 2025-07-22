@@ -25,7 +25,7 @@ const HelpCenterTable = () => {
           refreshToken,
           userId: user.userId,
         });
-        setMessages(response.data.supportTicket);
+        setMessages(response.supportTickets);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
@@ -154,7 +154,7 @@ const HelpCenterTable = () => {
       <ViewHelpCenterModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-         ticket={selectedTicket}
+        ticket={selectedTicket}
       />
     </div>
   );

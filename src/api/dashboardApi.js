@@ -274,7 +274,7 @@ const submitAnonymousMessage = async ({
     const response = await authFetch.post(
       `${PLAIN_API_URL}/anonymous-suggestion`,
       {
-        department: "Dimp",
+        department: formData.department,
         suggestion: formData.message,
         reason: formData.reason,
       }
@@ -335,7 +335,7 @@ const getHelpData = async ({ accessToken, refreshToken, userId }) => {
 
   try {
     const response = await authFetch.get(
-      `${PLAIN_API_URL}/getTicketsByUser/${userId}`
+      `${PLAIN_API_URL}/getTickets/${userId}`
     );
 
     return response.data;

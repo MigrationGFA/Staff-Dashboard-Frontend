@@ -16,7 +16,7 @@ const HelpCenterHeader = () => {
           refreshToken,
           userId: user.userId,
         });
-        setMessages(response?.data?.count);
+        setMessages(response?.count);
       } catch (error) {
         console.error("Error fetching messages:", error);
       }

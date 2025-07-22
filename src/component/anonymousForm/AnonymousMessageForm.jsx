@@ -8,9 +8,12 @@ import { FaSpinner } from "react-icons/fa";
 
 const AnonymousMessageForm = () => {
   const navigate = useNavigate();
+  const user = useSelector((state) => state.auth?.user);
+
   const [formData, setFormData] = useState({
     reason: "",
     message: "",
+    department: user?.department,
   });
   const [loading, setLoading] = useState(false);
 
