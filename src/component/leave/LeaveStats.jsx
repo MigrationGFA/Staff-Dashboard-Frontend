@@ -42,7 +42,7 @@ const LeaveStats = () => {
           Requested Leave Days
         </TextSpan>
         <TextSpan size="" color="" className="text-3xl">
-          {totalLeave?.requestedLeaveCount || 0}
+          {totalLeave?.requestedLeaveDays || 0}
         </TextSpan>
       </div>
       <div className="flex flex-col shadow-xl rounded-lg p-4 bg-gradient-to-tr  from-[#CF8611] to-sec11 space-y-4 hover:scale-105 transition duration-300">
@@ -50,7 +50,7 @@ const LeaveStats = () => {
           Pending Leave Days
         </TextSpan>
         <TextSpan size="" color="" className="text-3xl">
-          {totalLeave?.pendingLeaveCount || 0}
+          {totalLeave?.pendingLeaveDays || 0}
         </TextSpan>
       </div>
     </div>
